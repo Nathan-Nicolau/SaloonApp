@@ -57,7 +57,8 @@ dev_dependencies:
 flutter:
   assets:
     - lib/assets/icones/logo_inicial_saloon.svg
-    - lib/assets/icones/ic_apresentacao.svg
+    - lib/assets/icones/imagem_apresentacao.svg
+    - lib/assets/icones/imagem_paywall.svg
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icones in
   # the material Icons class.

@@ -1,5 +1,8 @@
 
 import 'package:flutter/material.dart';
+import 'package:saloon_app/src/telas/Onboarding.dart';
+import 'package:saloon_app/src/telas/Splash.dart';
+import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/widgets/SplashScreen.dart';
 
 class SaloonApplication extends StatelessWidget {
@@ -7,6 +10,17 @@ class SaloonApplication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SplashScreen();
+    return MaterialApp(
+      theme: ThemeData(
+        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.azulPrincipal),
+        brightness: Brightness.light,
+      ),
+      debugShowCheckedModeBanner: false,
+      initialRoute: "/",
+      routes: {
+        "/" : (context) => const Splash(),
+        "/apresentacao": (context) => const Onboarding()
+      },
+    );
   }
 }
