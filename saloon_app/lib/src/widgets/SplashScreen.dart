@@ -19,15 +19,21 @@ class _SplashScreenState extends State<SplashScreen> {
     Navigator.pushNamed(context, "/apresentacao");
   }
 
+  void setExibirCarregamento(bool exibir) {
+    setState(() {
+      exibirCarregamento = exibir;
+    });
+  }
+
   void funcaoExibirCarregamento() async {
-    await Future.delayed(const Duration(seconds: 3),() {
+    await Future.delayed(const Duration(seconds: 1),() {
       setState(() {
-        exibirCarregamento = false;
+        setExibirCarregamento(true);
+        Future.delayed(const Duration(seconds: 3), () {
+          setExibirCarregamento(false);
+          entrarAplicacao();
+        });
       });
-    }).then((value) => {
-      Future.delayed(const Duration(seconds: 2), () {
-        entrarAplicacao();
-      })
     });
   }
 
@@ -43,22 +49,22 @@ class _SplashScreenState extends State<SplashScreen> {
     return Scaffold(
       backgroundColor: AppColors.azulPrincipal,
       body: Center(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icone(AppIcons.iconeLogoInicial, 128, 128),
-              Container(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icone(AppIcons.iconeLogoInicial, 128, 128),
+            if (exibirCarregamento)
+              const SizedBox(
                 height: 32,
                 width: 32,
-                child: const CircularProgressIndicator(
+                child:
+                CircularProgressIndicator(
                   strokeWidth: 1,
                   color: AppColors.branco,
-                ).animate().fade(duration: const Duration(seconds: 2)),
+                ),
               )
-            ],
-          )
+          ],
         )
       ),
     );

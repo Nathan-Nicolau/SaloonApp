@@ -2,8 +2,10 @@
 import 'package:flutter/material.dart';
 import 'package:saloon_app/src/telas/LoginScreen.dart';
 import 'package:saloon_app/src/telas/Onboarding.dart';
+import 'package:saloon_app/src/telas/PaywallScreen.dart';
 import 'package:saloon_app/src/telas/Splash.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
+import 'package:saloon_app/src/telas/NovaContaScreen.dart';
 import 'package:saloon_app/src/widgets/SplashScreen.dart';
 
 class SaloonApplication extends StatelessWidget {
@@ -21,7 +23,9 @@ class SaloonApplication extends StatelessWidget {
       routes: {
         "/" : (context) => const Splash(),
         "/apresentacao": (context) => const Onboarding(),
-        "/login": (context) => const LoginScreen()
+        "/login": (context) => const LoginScreen(),
+        "/novaConta": (context) => const NovaContaScreen(),
+        "/paywall": (context) => const Paywallscreen()
       },
     );
   }

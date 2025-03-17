@@ -9,5 +9,6 @@ class AppColors {
   static const azulPrincipal = Color(-13350517);
   static const preto = Color(-13553359);
   static const cinza = Color(-6445905);
+  static const cinzaEscuro = Color(-13355980);
 
 }

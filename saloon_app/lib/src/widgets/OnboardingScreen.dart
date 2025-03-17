@@ -19,6 +19,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Navigator.pushNamed(context, "/login");
   }
 
+  void prosseguirNovaConta() {
+    Navigator.pushNamed(context, "/novaConta");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -34,7 +38,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             //Container inferior
             Container(
               width: double.infinity,
-              height: 320,
+              height: 380,
               decoration: const BoxDecoration(
                 color: AppColors.branco,
                   borderRadius: BorderRadius.only(
@@ -68,7 +72,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     child: Column(
                       spacing: 8,
                       children: [
-                        BotaoPrimario(() {}, "Criar nova conta"),
+                        BotaoPrimario(() {
+                          prosseguirNovaConta();
+                        }, "Criar nova conta"),
                         BotaoSecundario(() {
                           prosseguirTelaLogin();
                         },"Já tenho conta")
