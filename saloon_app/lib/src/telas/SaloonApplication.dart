@@ -1,5 +1,6 @@
 
 import 'package:flutter/material.dart';
+import 'package:saloon_app/src/telas/LoginScreen.dart';
 import 'package:saloon_app/src/telas/Onboarding.dart';
 import 'package:saloon_app/src/telas/Splash.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
@@ -19,7 +20,8 @@ class SaloonApplication extends StatelessWidget {
       initialRoute: "/",
       routes: {
         "/" : (context) => const Splash(),
-        "/apresentacao": (context) => const Onboarding()
+        "/apresentacao": (context) => const Onboarding(),
+        "/login": (context) => const LoginScreen()
       },
     );
   }

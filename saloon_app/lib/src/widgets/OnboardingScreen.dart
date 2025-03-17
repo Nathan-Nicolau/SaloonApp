@@ -14,6 +14,11 @@ class OnboardingScreen extends StatefulWidget {
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
+
+  void prosseguirTelaLogin() {
+    Navigator.pushNamed(context, "/login");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +69,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       spacing: 8,
                       children: [
                         BotaoPrimario(() {}, "Criar nova conta"),
-                        BotaoSecundario(() {},"Já tenho conta")
+                        BotaoSecundario(() {
+                          prosseguirTelaLogin();
+                        },"Já tenho conta")
                       ],
                     ),
                   ),

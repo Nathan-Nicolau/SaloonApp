@@ -50,6 +50,8 @@ class _SplashScreenState extends State<SplashScreen> {
             children: [
               Icone(AppIcons.iconeLogoInicial, 128, 128),
               Container(
+                height: 32,
+                width: 32,
                 child: const CircularProgressIndicator(
                   strokeWidth: 1,
                   color: AppColors.branco,
