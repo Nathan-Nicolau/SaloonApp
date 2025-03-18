@@ -16,10 +16,18 @@ class _LoginwidgetState extends State<Loginwidget> {
   @override
   Widget build(BuildContext context) {
 
-     bool senhaVisivel = true;
+    bool senhaVisivel = true;
 
     void retornarTela() {
       Navigator.pop(context);
+      Navigator.pop(context);
+      Navigator.pop(context);
+    }
+
+    void setVisibilidadeSenha(bool visivel) {
+      setState(() {
+        senhaVisivel = visivel;
+      });
     }
 
     return Scaffold(
@@ -59,9 +67,12 @@ class _LoginwidgetState extends State<Loginwidget> {
                 fontWeight: FontWeight.w500,
                 color: AppColors.preto
             ),),
-            TextField(
+             TextField(
               decoration: InputDecoration(
-                  hintText: "Digite seu e-mail"
+                  hintText: "Digite seu email",
+                  hintStyle: GoogleFonts.poppins(
+                    fontSize: 14
+                  )
               ),
             ),
             Text("Senha", style: GoogleFonts.poppins(
@@ -73,19 +84,20 @@ class _LoginwidgetState extends State<Loginwidget> {
               obscureText: senhaVisivel,
               decoration: InputDecoration(
                   hintText: "Digite sua senha de acesso",
+                  hintStyle: GoogleFonts.poppins(
+                      fontSize: 14
+                  ),
                   suffixIcon: IconButton(onPressed: () {
-                    setState(() {
-                        if(senhaVisivel) {
-                          senhaVisivel = false;
-                        } else {
-                          senhaVisivel = true;
-                        }
-                    });
-                  }, icon: Icon(senhaVisivel ? Icons.visibility_off_outlined : Icons.visibility_outlined))
+                    setVisibilidadeSenha(!senhaVisivel);
+                  }, icon: senhaVisivel ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.visibility_outlined))
               ),
             ),
-            BotaoPrimario(() {}, "Entrar"),
-            BotaoSecundario(() {}, "Esqueci minha senha")
+            BotaoPrimario(() {
+
+            }, "Entrar"),
+            BotaoSecundario(() {
+
+            }, "Esqueci minha senha")
           ],
         ),
       ),

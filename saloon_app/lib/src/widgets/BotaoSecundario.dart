@@ -19,22 +19,22 @@ class _BotaoSecundarioState extends State<BotaoSecundario> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+
+    return SizedBox(
       width: double.infinity,
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12), side:
-            BorderSide(
-              color: AppColors.azulPrincipal,
-              width: 2
-            ))),
+            const BorderSide(color: AppColors.azulPrincipal, width: 2))),
             backgroundColor: const WidgetStatePropertyAll(AppColors.branco),
             elevation: const WidgetStatePropertyAll(1),
         ),
-        child: Text(widget.textoBotao,
+        child: Text(
+            widget.textoBotao,
             style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.azulPrincipal)),
       ),
     );
   }
+
 }

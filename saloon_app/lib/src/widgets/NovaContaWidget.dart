@@ -21,12 +21,15 @@ class _NovaContaWidgetState extends State<NovaContaWidget> {
     Navigator.pushNamed(context, "/paywall");
   }
 
+  //TODO - Criar navegação para as outras telas
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: AppColors.branco,
         leading: GestureDetector(
-          child: Icon(Icons.arrow_back_rounded, color: AppColors.preto),
+          child: const Icon(Icons.arrow_back_rounded, color: AppColors.preto),
           onTap: () {
             retornarTela();
           },

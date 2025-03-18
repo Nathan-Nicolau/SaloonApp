@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saloon_app/src/utils/UtilsUI.dart';
+import 'package:saloon_app/src/widgets/PontoTextoWidget.dart';
 import '../utils/AppColors.dart';
 import '../utils/app_icons.dart';
 import 'BotaoPrimario.dart';
@@ -41,26 +43,40 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                   spacing: 12,
                   children: [
                     Container(
+                      padding: UtilsUI.padding,
                       margin: const EdgeInsets.fromLTRB(0, 24, 0, 0),
                       child: Text("Gerenciamento completo de sua agenda",
+                          textAlign: TextAlign.center,
                           style: GoogleFonts.poppins(
                               fontSize: 24,
                               fontWeight: FontWeight.w500,
-                              color: AppColors.preto
+                              color: AppColors.preto,
                           )
                       ),
                     ),
                     Container(
+                      width: double.infinity,
                       padding: const EdgeInsets.all(12),
                       child: Column(
                         spacing: 8,
                         children: [
-                          BotaoPrimario(() {
+                          const PontoTextoWidget("Tenha acesso completo ao sistema gratuitamente no período de testes"),
+                          const PontoTextoWidget("Sem limitações de notificações para clientes, cadastro de serviços, relatórios ou agendamentos"),
+                          const PontoTextoWidget("Plano inicial de apenas RS 29,90 por mês para dois profissionais simultâneos."),
+                          const PontoTextoWidget("Cancele a sua assinatura quando quiser. Sem multas ou fidelidade. Você no controle do seu negócio!"),
+                          Container(
+                            margin: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
+                            child: Column(
+                              children: [
+                                BotaoPrimario(() {
 
-                          }, "Testar grátis por 15 dias"),
-                          BotaoSecundario(() {
+                                }, "Testar grátis por 15 dias"),
+                                BotaoSecundario(() {
 
-                          },"Assine já")
+                                },"Assine já")
+                              ],
+                            ),
+                          )
                         ],
                       ),
                     ),
