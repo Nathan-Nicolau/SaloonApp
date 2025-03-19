@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/utils/app_icons.dart';
 import 'package:saloon_app/src/widgets/Icone.dart';
 
-class SplashScreen extends StatefulWidget {
-  const SplashScreen({super.key});
+class SplashWidget extends StatefulWidget {
+  const SplashWidget({super.key});
 
   @override
-  State<SplashScreen> createState() => _SplashScreenState();
+  State<SplashWidget> createState() => _SplashWidgetState();
 }
 
-class _SplashScreenState extends State<SplashScreen> {
+class _SplashWidgetState extends State<SplashWidget> {
 
   bool exibirCarregamento = true;
 
