@@ -1,7 +1,6 @@
 
 import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
 
-// Classe de entidade do usuário
 
 class Usuario {
 

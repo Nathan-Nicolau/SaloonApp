@@ -7,6 +7,6 @@ class AgendamentoScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return AgendamentoWidget();
+    return const AgendamentoWidget();
   }
 }
