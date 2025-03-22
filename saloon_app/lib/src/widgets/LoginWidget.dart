@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
+import 'package:saloon_app/src/widgets/BotaoLoading.dart';
 import 'package:saloon_app/src/widgets/CampoTexto.dart';
+
 import '../utils/AppColors.dart';
-import 'BotaoPrimario.dart';
 import 'BotaoSecundario.dart';
 
 class Loginwidget extends StatefulWidget {
@@ -18,10 +19,17 @@ class _LoginwidgetState extends State<Loginwidget> {
   @override
   Widget build(BuildContext context) {
 
+    bool exibirCarregamento = false;
     String loginUsuarioInformado = "";
     String senhaInformada = "";
 
     UsuarioVO usuarioVO = UsuarioVO.vazio();
+
+    void setExibirCarregamento() {
+      setState(() {
+        exibirCarregamento = !exibirCarregamento;
+      });
+    }
 
     void setLoginUsuarioInformado(String login) {
       setState(() {
@@ -43,8 +51,6 @@ class _LoginwidgetState extends State<Loginwidget> {
     bool senhaVisivel = true;
 
     void retornarTela() {
-      Navigator.pop(context);
-      Navigator.pop(context);
       Navigator.pop(context);
     }
 
@@ -86,32 +92,18 @@ class _LoginwidgetState extends State<Loginwidget> {
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text("E-mail", style: GoogleFonts.poppins(
-                fontSize: 16,
-                fontWeight: FontWeight.w500,
-                color: AppColors.preto
-            ),),
-             CampoTexto("Email", "Digite seu email de acesso", "", AppColors.preto, false, false, null, null, (texto) {
+            CampoTexto("","Email", "Digite seu email de acesso", "", AppColors.preto, false, false, null, null, (texto) {
 
              }),
-            TextField(
-              obscureText: senhaVisivel,
-              decoration: InputDecoration(
-                  hintText: "Digite sua senha de acesso",
-                  hintStyle: GoogleFonts.poppins(
-                      fontSize: 14
-                  ),
-                  suffixIcon: IconButton(onPressed: () {
-                    setVisibilidadeSenha(!senhaVisivel);
-                  }, icon: senhaVisivel ? const Icon(Icons.visibility_off_outlined) : const Icon(Icons.visibility_outlined))
-              ),
-            ),
-            BotaoPrimario(() {
+            CampoTexto("","Senha", "Digite sua senha", "", AppColors.preto, false, false, null, null, (texto) {
 
-            }, "Entrar"),
-            BotaoSecundario(() {
-
-            }, "Esqueci minha senha")
+            }),
+            BotaoLoading(onPressed: () async {
+              return Future.delayed(const Duration(seconds: 10)).then((valor) {
+                return false;
+              });
+            }, textoBotao: "Entrar"),
+            BotaoSecundario(() {}, "Esqueci minha senha")
           ],
         ),
       ),

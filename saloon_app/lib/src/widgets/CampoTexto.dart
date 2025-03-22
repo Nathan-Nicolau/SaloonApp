@@ -24,8 +24,8 @@ class _CampoTextoState extends State<CampoTexto> {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(child:
-    Column(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.label, style: GoogleFonts.poppins(
           fontSize: 16,
@@ -45,7 +45,7 @@ class _CampoTextoState extends State<CampoTexto> {
           ),
         )
       ],
-    ));
+    );
   }
 
 }

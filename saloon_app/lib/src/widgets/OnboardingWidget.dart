@@ -6,14 +6,14 @@ import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/BotaoSecundario.dart';
 import 'package:saloon_app/src/widgets/Icone.dart';
 
-class OnboardingScreen extends StatefulWidget {
-  const OnboardingScreen({super.key});
+class OnboardingWidget extends StatefulWidget {
+  const OnboardingWidget({super.key});
 
   @override
-  State<OnboardingScreen> createState() => _OnboardingScreenState();
+  State<OnboardingWidget> createState() => _OnboardingWidgetState();
 }
 
-class _OnboardingScreenState extends State<OnboardingScreen> {
+class _OnboardingWidgetState extends State<OnboardingWidget> {
 
   void prosseguirTelaLogin() {
     Navigator.pushNamed(context, "/login");
@@ -21,6 +21,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   void prosseguirNovaConta() {
     Navigator.pushNamed(context, "/novaConta");
+  }
+
+  void prosseguirAgendamentoRapido() {
+    Navigator.pushNamed(context, "/agendamento-rapido");
   }
 
   @override
@@ -32,9 +36,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         width: double.infinity,
         child: Column(
           children: [
-            Spacer(flex: 1),
-            Icone(AppIcons.iconeApresentacao, 200, 200),
-            Spacer(flex: 1),
+            Expanded(child: Icone(AppIcons.iconeApresentacao, 200, 200)),
             //Container inferior
             Container(
               width: double.infinity,
@@ -73,6 +75,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       spacing: 8,
                       children: [
                         BotaoPrimario(() {
+                          prosseguirAgendamentoRapido();
+                        }, "Agendamento rápido"),
+                        BotaoSecundario(() {
                           prosseguirNovaConta();
                         }, "Criar nova conta"),
                         BotaoSecundario(() {
