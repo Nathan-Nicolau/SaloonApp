@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:saloon_app/src/telas/AgendamentoScreen.dart';
+import 'package:saloon_app/src/telas/CadastroSalaoScreen.dart';
 import 'package:saloon_app/src/telas/LoginScreen.dart';
 import 'package:saloon_app/src/telas/OnboardingScreen.dart';
 import 'package:saloon_app/src/telas/PaywallScreen.dart';
@@ -28,7 +29,8 @@ class SaloonApplication extends StatelessWidget {
         "/login": (context) => const LoginScreen(),
         "/novaConta": (context) => const NovaContaScreen(),
         "/paywall": (context) => const Paywallscreen(),
-        "/agendamento-rapido": (context) => const AgendamentoScreen()
+        "/agendamento-rapido": (context) => const AgendamentoScreen(),
+        "/cadastroProprietario": (context) => const CadastroSalaoScreen()
       },
     );
   }

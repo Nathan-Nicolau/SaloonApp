@@ -18,7 +18,6 @@ class _BotaoPrimarioState extends State<BotaoPrimario> {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      width: double.infinity,
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(

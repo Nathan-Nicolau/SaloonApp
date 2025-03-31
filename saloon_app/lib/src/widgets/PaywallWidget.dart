@@ -16,6 +16,11 @@ class PaywallWidget extends StatefulWidget {
 }
 
 class _PaywallWidgetState extends State<PaywallWidget> {
+
+  void prosseguirTelaCadastroProprietario() {
+    Navigator.pushNamed(context, "/cadastroProprietario");
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,7 +74,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                             child: Column(
                               children: [
                                 BotaoPrimario(() {
-
+                                  prosseguirTelaCadastroProprietario();
                                 }, "Testar grátis por 15 dias"),
                                 BotaoSecundario(() {
 

@@ -14,7 +14,7 @@ class CampoTexto extends StatefulWidget {
   Icon? iconeFinal;
   Function(String valor) onTextChange;
 
-  CampoTexto(this.valorTexto, this.label, this.placeholder, this.textoAjudaInferior, this.corTexto, this.erro, this.aviso, this.iconeInicial, this.iconeFinal, this.onTextChange, {super.key});
+  CampoTexto({required this.valorTexto, required this.label, required this.placeholder, required this.textoAjudaInferior, required this.corTexto, required this.erro, required this.aviso, required this.iconeInicial, required this.iconeFinal, required this.onTextChange, super.key});
 
   @override
   State<CampoTexto> createState() => _CampoTextoState();

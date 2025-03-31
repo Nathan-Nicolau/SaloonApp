@@ -92,10 +92,10 @@ class _LoginwidgetState extends State<Loginwidget> {
           spacing: 12,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            CampoTexto("","Email", "Digite seu email de acesso", "", AppColors.preto, false, false, null, null, (texto) {
+            CampoTexto(valorTexto: "",label: "Email", placeholder: "Digite seu email de acesso", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (texto) {
 
              }),
-            CampoTexto("","Senha", "Digite sua senha", "", AppColors.preto, false, false, null, null, (texto) {
+            CampoTexto(valorTexto: "", label: "Senha",placeholder:  "Digite sua senha",textoAjudaInferior:  "",corTexto:  AppColors.preto,erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (texto) {
 
             }),
             BotaoLoading(onPressed: () async {
