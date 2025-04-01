@@ -23,7 +23,7 @@ class _BotaoPrimarioState extends State<BotaoPrimario> {
         style: ButtonStyle(
             shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
             backgroundColor: const WidgetStatePropertyAll(AppColors.azulPrincipal),
-            elevation: const WidgetStatePropertyAll(4)
+            elevation: const WidgetStatePropertyAll(2)
         ),
         child: Text(widget.textoBotao,
             style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.branco)),

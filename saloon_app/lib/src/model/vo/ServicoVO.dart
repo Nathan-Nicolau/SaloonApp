@@ -5,6 +5,7 @@ class ServicoVO {
   //TODO - Analisar necessidade desse campo direto de imagem
   String? tempoDuracao;
   double? valor;
+  int? idCategoria;
   DateTime? dataCadastro;
   DateTime? dataAtualizacao;
 
@@ -13,6 +14,7 @@ class ServicoVO {
   String? getDescricaoServico() => descricaoServico;
   String? getTempoDuracao() => tempoDuracao;
   double? getValor() => valor;
+  int? getIdCategoriaServico() => idCategoria;
   DateTime? getDataCadastro() => dataCadastro;
   DateTime? getDataAtualizacao() => dataAtualizacao;
 
@@ -34,6 +36,10 @@ class ServicoVO {
 
   void setValor(double valor) {
     this.valor = valor;
+  }
+
+  void setIdCategoria(int idCategoria) {
+    this.idCategoria = idCategoria;
   }
 
   void setDataCadastro(DateTime dataCadastro) {
