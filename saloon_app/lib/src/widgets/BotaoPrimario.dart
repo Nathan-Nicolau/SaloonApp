@@ -6,8 +6,10 @@ class BotaoPrimario extends StatefulWidget {
 
   final VoidCallback onPressed;
   final String textoBotao;
+  final bool larguraExtendida;
+  final Icon? icone;
 
-  const BotaoPrimario(this.onPressed,this.textoBotao,{super.key});
+  const BotaoPrimario({required this.onPressed,required this.textoBotao, this.larguraExtendida = false, this.icone = null, super.key});
 
   @override
   State<BotaoPrimario> createState() => _BotaoPrimarioState();
@@ -18,6 +20,7 @@ class _BotaoPrimarioState extends State<BotaoPrimario> {
   Widget build(BuildContext context) {
 
     return SizedBox(
+      width: widget.larguraExtendida ? double.infinity : null,
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(
@@ -25,8 +28,14 @@ class _BotaoPrimarioState extends State<BotaoPrimario> {
             backgroundColor: const WidgetStatePropertyAll(AppColors.azulPrincipal),
             elevation: const WidgetStatePropertyAll(2)
         ),
-        child: Text(widget.textoBotao,
-            style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w400, color: AppColors.branco)),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(widget.textoBotao,
+                style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.branco)),
+            widget.icone != null ? widget.icone! : Row()
+          ],
+        ),
       ),
     );
 

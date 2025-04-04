@@ -74,15 +74,15 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                     child: Column(
                       spacing: 8,
                       children: [
-                        BotaoPrimario(() {
+                        BotaoPrimario(onPressed: () {
                           prosseguirAgendamentoRapido();
-                        }, "Agendamento rápido"),
-                        BotaoSecundario(() {
+                        }, textoBotao: "Agendamento rápido", larguraExtendida: true),
+                        BotaoSecundario(onPressed: () {
                           prosseguirNovaConta();
-                        }, "Criar nova conta"),
-                        BotaoSecundario(() {
+                        }, textoBotao: "Criar nova conta"),
+                        BotaoSecundario(onPressed: () {
                           prosseguirTelaLogin();
-                        },"Já tenho conta")
+                        },textoBotao: "Já tenho conta")
                       ],
                     ),
                   ),

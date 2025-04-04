@@ -33,12 +33,15 @@ class _CampoTextoState extends State<CampoTexto> {
           color: widget.corTexto
         )),
         TextField(
+          textAlign: TextAlign.start,
           onChanged: widget.onTextChange,
           controller: TextEditingController(
             text: widget.valorTexto
           ),
           decoration: InputDecoration(
+              icon: widget.iconeInicial,
               hintText: widget.placeholder,
+              hintTextDirection: TextDirection.ltr,
               hintStyle: GoogleFonts.poppins(
                   fontSize: 14
               )

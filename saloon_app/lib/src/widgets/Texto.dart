@@ -14,7 +14,8 @@ class Texto extends StatelessWidget {
   Widget build(BuildContext context) {
     return Text(texto, style: GoogleFonts.poppins(
       fontSize: tamanhoTexto,
-      fontWeight: peso
+      fontWeight: peso,
+      color: cor
     ));
   }
 }

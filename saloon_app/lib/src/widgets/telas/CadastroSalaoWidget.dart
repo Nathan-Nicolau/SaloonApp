@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
 import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
 import 'package:saloon_app/src/model/vo/SalaoVO.dart';
@@ -7,10 +8,12 @@ import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
 import 'package:saloon_app/src/utils/UtilsUI.dart';
 import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/Texto.dart';
+import 'package:saloon_app/src/widgets/dialog/DialogConfirmacao.dart';
 import 'package:saloon_app/src/widgets/dialog/DialogMensagem.dart';
-
 import '../../utils/AppColors.dart';
 import '../CampoTexto.dart';
+import '../CardServicoAdicionado.dart';
+import '../ContainerServicoAdicionado.dart';
 
 class CadastroSalaoWidget extends StatefulWidget {
   const CadastroSalaoWidget({super.key});
@@ -32,7 +35,14 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   late List<CategoriaServicoVO> listaCategoriasSelecionadas;
   late final TabController tabController;
   late List<Widget> listaAbasCategorias;
-  late List<ServicoVO> listaServicos;
+  //Essa lista recebe todos os serviços cadastrados
+  late List<ServicoVO> listaServicosTotais;
+  late List<ServicoVO> listaServicosCabeloMasculino;
+  late List<ServicoVO> listaServicosCabeloFeminino;
+  late List<ServicoVO> listaServicosDepilacao;
+  late List<ServicoVO> listaServicosManicure;
+  late List<ServicoVO> listaServicosMaquiagem;
+  late List<ServicoVO> listaServicosOutros;
   late ServicoVO servicoAdicionado;
   bool exibirDialogServicoIncorreto = false;
 
@@ -53,13 +63,13 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     listaCategoriasSelecionadas = [];
     listaAbasCategorias = [];
     tabController = TabController(length: 6, vsync: this);
-    listaServicos = [];
+    listaServicosTotais = [];
   }
 
   void setTextoPaginaAtual(bool proximo) {
     setState(() {
       if(proximo) {
-        if(textoPagina < 5) {
+        if(textoPagina < 6) {
           textoPagina++;
         }
       } else {
@@ -73,7 +83,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
 
   void proximaPagina() {
     setState(() {
-      if(pagina < 4) {
+      if(pagina < 5) {
         pagina++;
       }
     });
@@ -103,6 +113,9 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
           tituloAppBar = "Serviços oferecidos";
           break;
         case 5:
+          tituloAppBar = "Seus serviços cadastrados";
+          break;
+        case 6:
           tituloAppBar = "Horário de funcionamento";
           break;
       }
@@ -111,38 +124,77 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
 
   void ajustarListaCategoriasSelecionadas(int codigoCategoriaEnum, bool adicionar) {
 
-    List<CategoriaServicoVO> listaAuxiliar = [];
+    setState(() {
+      List<CategoriaServicoVO> listaAuxiliar = [];
 
-    for(var item in listaCategoriasBase) {
-      if(item.idCategoriaServico == codigoCategoriaEnum) {
-        for(var categoria in listaCategoriasSelecionadas) {
-          if(adicionar) {
-            if(categoria.idCategoriaServico != codigoCategoriaEnum) {
-              listaAuxiliar.add(categoria);
+      for(var item in listaCategoriasBase) {
+        if(item.idCategoriaServico == codigoCategoriaEnum) {
+          for(var categoria in listaCategoriasSelecionadas) {
+            if(adicionar) {
+              if(categoria.idCategoriaServico != codigoCategoriaEnum) {
+                listaAuxiliar.add(categoria);
+              }
+            } else {
+              listaAuxiliar = listaCategoriasSelecionadas;
+              listaAuxiliar.remove(categoria);
             }
-          } else {
-            listaAuxiliar = listaCategoriasSelecionadas;
-            listaAuxiliar.remove(categoria);
           }
         }
       }
-    }
+      listaCategoriasSelecionadas = listaAuxiliar;
+    });
+  }
 
-    listaCategoriasSelecionadas = listaAuxiliar;
+  bool dadosServicoInformados(ServicoVO servicoVo) {
+    var descricaoInformada = servicoVo.getDescricaoServico() != null;
+    var valorInformado = servicoVo.getValor() != null;
+    var tempoInformado = servicoVo.getTempoDuracao() != null;
+    return descricaoInformada && valorInformado && tempoInformado;
   }
 
   void cadastrarNovoServico(ServicoVO novoServico) {
     setState(() {
-      if(novoServico.getDescricaoServico() != null) {
-        listaServicos.add(servicoAdicionado);
+      if(dadosServicoInformados(novoServico)) {
+        adicionarServicoNaSuaLista(novoServico);
         servicoAdicionado = ServicoVO();
       } else {
+        //Quando os campos de informação do serviço não tiverem sido informados
         showDialog(context: context, builder: (BuildContext context) {
-          return DialogMensagem(mensagem: "Há informações pendentes no serviço informado", onDismiss: () {
+          return DialogMensagem(mensagem: "Há informações pendentes para o cadastro do serviço", onDismiss: () {
             Navigator.pop(context);
           });
         });
       }
+    });
+  }
+
+  void adicionarServicoNaSuaLista(ServicoVO servico) {
+    listaServicosTotais.add(servico);
+  }
+
+  bool categoriaFoiSelecionada(CategoriaServicoEnum categoriaEnum) {
+    bool categoriaFoiSelecionada = false;
+    setState(() {
+      for(var categoria in listaCategoriasSelecionadas) {
+        if(categoria.idCategoriaServico == categoriaEnum.codigo) {
+          categoriaFoiSelecionada = true;
+        }
+      }
+      });
+    return categoriaFoiSelecionada;
+  }
+
+  void removerServico(ServicoVO servicoParaRemover) {
+    setState(() {
+      listaServicosTotais.remove(servicoParaRemover);
+    });
+  }
+
+  void showDialogConfirmacao(ServicoVO servicoVo) {
+    setState(() {
+      showDialog(context: context, builder: (BuildContext context) {
+        return DialogConfirmacao(mensagem: "Ola", onDismiss: (ok) {});
+      });
     });
   }
 
@@ -151,56 +203,52 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
 
     //Lista de telas construídas aqui
     List<Widget> telas = [
-      //Primeira página
-      Expanded(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-            child: Column(
-                spacing: 8,
-                children: [
-                  //Nome de cadastro do usuário proprietário
-                  CampoTexto(valorTexto: usuario.getNomeUsuario(), label: "Nome do(a) responsável", placeholder: "Seu nome de usuário", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    usuario.setNomeUsuario(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: usuario.getEmailUsuario(), label: "E-mail", placeholder: "Digite seu e-mail de acesso", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    usuario.setEmailUsuario(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: usuario.getTelefoneUsuario(), label: "Telefone", placeholder: "Digite seu número de telefone", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    usuario.setTelefoneUsuario(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: usuario.getSenhausuario(), label: "Senha", placeholder: "Mínimo de 8 caracteres", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    usuario.setSenhaUsuario(valorTexto);
-                  }),
-                ]
-            )
-          )
+      //Primeira página - Acesso
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+        child: Column(
+            spacing: 8,
+            children: [
+              //Nome de cadastro do usuário proprietário
+              CampoTexto(valorTexto: usuario.getNomeUsuario(), label: "Nome do(a) responsável", placeholder: "Seu nome de usuário", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                usuario.setNomeUsuario(valorTexto);
+              }),
+              CampoTexto(valorTexto: usuario.getEmailUsuario(), label: "E-mail", placeholder: "Digite seu e-mail de acesso", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                usuario.setEmailUsuario(valorTexto);
+              }),
+              CampoTexto(valorTexto: usuario.getTelefoneUsuario(), label: "Telefone", placeholder: "Digite seu número de telefone", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                usuario.setTelefoneUsuario(valorTexto);
+              }),
+              CampoTexto(valorTexto: usuario.getSenhausuario(), label: "Senha", placeholder: "Mínimo de 8 caracteres", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                usuario.setSenhaUsuario(valorTexto);
+              }),
+            ]
+        )
       ),
-      //Segunda página
-      Expanded(
-          child: Container(
-            padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-            child: Column(
-                spacing: 8,
-                children: [
-                  //Nome de cadastro do usuário proprietário
-                  CampoTexto(valorTexto: "", label: "Nome do estabelecimento", placeholder: "Nome do seu salão", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    salao.setNomeSalao(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: "", label: "CEP", placeholder: "Digite apenas os números", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    salao.setCepEndereco(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: "", label: "Endereço", placeholder: "Endereço do local", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    salao.setEnderecoSalao(valorTexto);
-                  }),
-                  CampoTexto(valorTexto: "", label: "Número", placeholder: "Do endereço", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                    salao.setNumeroEndereco(valorTexto);
-                  })
-                ]
-            ),
-          )
+      //Segunda página - Informações do local
+      Container(
+        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
+        child: Column(
+            spacing: 8,
+            children: [
+              //Nome de cadastro do usuário proprietário
+              CampoTexto(valorTexto: "", label: "Nome do estabelecimento", placeholder: "Nome do seu salão", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                salao.setNomeSalao(valorTexto);
+              }),
+              CampoTexto(valorTexto: "", label: "CEP", placeholder: "Digite apenas os números", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                salao.setCepEndereco(valorTexto);
+              }),
+              CampoTexto(valorTexto: "", label: "Endereço", placeholder: "Endereço do local", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                salao.setEnderecoSalao(valorTexto);
+              }),
+              CampoTexto(valorTexto: "", label: "Número", placeholder: "Do endereço", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
+                salao.setNumeroEndereco(valorTexto);
+              })
+            ]
+        ),
       ),
-      //Terceira página
-      Expanded(
+      //Terceira página - Categorias de Serviços
+      SizedBox(
         child: Container(
           padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
           child: Column(
@@ -289,7 +337,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
           )
         ),
       ),
-      //Quarta página
+      //Quarta página - Serviços oferecidos
       SizedBox(
         height: double.infinity,
           child: DefaultTabController(length: listaCategoriasSelecionadas.length,
@@ -315,19 +363,30 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
                             child: TabBarView(
                                 controller: tabController,
                                 children: [
-                                  ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.CABELO_MASCULINO.codigo, onRegister: (novoServico) {
+                                  cabeloMasculino ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_MASCULINO, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  }),ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.CABELO_FEMININO.codigo, onRegister: (novoServico) {
+                                  }) : const InfoCategoriaDesabilitada(),
+                                  cabeloFeminino ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_FEMININO, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  }),ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.DEPILACAO.codigo, onRegister: (novoServico) {
+                                  }) : const InfoCategoriaDesabilitada(),
+                                  depilacao ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.DEPILACAO, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  }),ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.MANICURE.codigo, onRegister: (novoServico) {
+                                  }) : const InfoCategoriaDesabilitada(),
+                                  manicure ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.MANICURE, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  }),ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.MAQUIAGEM.codigo, onRegister: (novoServico) {
+                                  }) : const InfoCategoriaDesabilitada(),
+                                  maquiagem ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.MAQUIAGEM, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  }),ContainerServicoAdicionado(codigCategoriaServico: CategoriaServicoEnum.OUTROS.codigo, onRegister: (novoServico) {
+                                  }) : const  InfoCategoriaDesabilitada(),
+                                  outros ?
+                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.OUTROS, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
-                                  })
+                                  }) : const InfoCategoriaDesabilitada()
                                 ]
                             ),
                           );
@@ -337,6 +396,61 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
                 ],
               )
           )
+      ),
+      //Quinta página - Serviços adicionados
+      SizedBox(
+        child: Column(
+          children: [
+            listaServicosTotais.isNotEmpty
+                ? Expanded( // Adicionado Expanded aqui para o ListView.builder
+              child: ListView.builder(
+                controller: ScrollController(),
+                itemCount: listaServicosTotais.length,
+                itemBuilder: (context, index) {
+                  ServicoVO servico = listaServicosTotais[index];
+                  return CardServicoAdicionado(
+                    servicoVO: servico,
+                    removerServico: (servico) {
+                      showDialogConfirmacao(servico);
+                    },
+                  );
+                },
+              ),
+            )
+                : const SizedBox(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Center(
+                        child: Column(
+                          children: [
+                            Texto(
+                            texto: "Parece que você ainda não cadastrou nenhum serviço",
+                            tamanhoTexto: 16,
+                            peso: FontWeight.w600,
+                            cor: AppColors.preto),
+                            Texto(
+                                texto: "Clique no botão voltar e adicione algum serviço",
+                                tamanhoTexto: 14,
+                                peso: FontWeight.normal,
+                                cor: AppColors.preto)
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+          ],
+        ),
+      ),
+      //Sexta página - Horário funcionamento
+      SizedBox(
+        child: Column(
+          children: [
+            Text("Seus horários aqui")
+          ],
+        ),
       )
     ];
     
@@ -345,8 +459,8 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
         title: Texto(texto: tituloAppBar, tamanhoTexto: 18, peso: FontWeight.bold, cor: AppColors.preto),
         actions: [
           Padding(
-            padding: EdgeInsets.fromLTRB(0, 0, 12, 0),
-            child: Texto(texto: "$textoPagina/5", tamanhoTexto: 16, peso: FontWeight.w600, cor: AppColors.preto)
+            padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
+            child: Texto(texto: "$textoPagina/6", tamanhoTexto: 16, peso: FontWeight.w600, cor: AppColors.preto)
           )
 
         ],
@@ -361,14 +475,14 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
-            BotaoPrimario(() {
+            BotaoPrimario(onPressed: () {
               paginaAnterior();
               setTextoPaginaAtual(false);
-            }, "Voltar"),
-            BotaoPrimario(() {
+            }, textoBotao: "Voltar"),
+            BotaoPrimario(onPressed: () {
               proximaPagina();
               setTextoPaginaAtual(true);
-            }, "Avançar")
+            }, textoBotao: "Avançar")
           ],
         ),
       ),
@@ -377,60 +491,23 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   
 }
 
-class ContainerServicoAdicionado extends StatefulWidget {
-
-  int codigCategoriaServico;
-  Function(ServicoVO) onRegister;
-
-  ContainerServicoAdicionado({required this.codigCategoriaServico, required this.onRegister, super.key});
-
-  @override
-  State<ContainerServicoAdicionado> createState() => _ContainerServicoAdicionadoState();
-}
-
-class _ContainerServicoAdicionadoState extends State<ContainerServicoAdicionado> {
-
-  late ServicoVO servicoAdicionado;
-
-  @override
-  void initState() {
-    super.initState();
-    servicoAdicionado = ServicoVO();
-  }
+class InfoCategoriaDesabilitada extends StatelessWidget {
+  const InfoCategoriaDesabilitada({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.fromLTRB(24, 24, 24, 24),
-      child: Column(
-        spacing: 4,
-        children: [
-          //Nome de cadastro do usuário proprietário
-          CampoTexto(valorTexto: "", label: "Nome do Serviço", placeholder: "Nome do seu salão", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-            servicoAdicionado.setDescricaoServico(valorTexto);
-          }),
-          CampoTexto(valorTexto: "", label: "Valor do Serviço", placeholder: "RS",textoAjudaInferior: "", corTexto: AppColors.preto,erro: false, aviso: false, iconeInicial: null, iconeFinal: null,onTextChange: (valorTexto) {
-            servicoAdicionado.setValor(double.tryParse(valorTexto) ?? 0);
-          }),
-          CampoTexto(valorTexto: "", label: "Tempo de duração", placeholder: "Exemplo: 1 hora",textoAjudaInferior: "", corTexto: AppColors.preto,erro: false, aviso: false, iconeInicial: null, iconeFinal: null,onTextChange: (valorTexto) {
-            servicoAdicionado.setValor(double.tryParse(valorTexto) ?? 0);
-          }),
-          const Row(),
-          Row(
-            spacing: 4,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              BotaoPrimario(() {
-                servicoAdicionado.setIdCategoria(widget.codigCategoriaServico);
-                widget.onRegister(servicoAdicionado);
-              }, "Adicionar serviço dessa categoria")
-            ],
-          )
-        ],
+    return SizedBox(
+      child: Center(
+        child: Padding(padding: const EdgeInsets.all(24),
+        child: Column(
+          children: [
+            Text("Essa categoria não foi selecionada\npara que serviços possam ser adicionados a ela",
+              style: GoogleFonts.poppins(
+                fontSize: 14,
+                fontWeight: FontWeight.normal), textAlign: TextAlign.center)
+          ],
+        ),),
       ),
     );
   }
 }
-
-
-

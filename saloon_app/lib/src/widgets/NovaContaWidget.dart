@@ -62,15 +62,15 @@ class _NovaContaWidgetState extends State<NovaContaWidget> {
               child: Column(
                 spacing: 4,
                 children: [
-                  BotaoSecundario(() {
+                  BotaoSecundario(onPressed: () {
                     navegarTelaAdministrador();
-                  }, "Sou administrador(a) de salão"),
-                  BotaoSecundario(() {
+                  }, textoBotao: "Sou administrador(a) de salão"),
+                  BotaoSecundario(onPressed: () {
 
-                  }, "Sou um(a) cliente"),
-                  BotaoSecundario(() {
+                  },textoBotao:  "Sou um(a) cliente"),
+                  BotaoSecundario(onPressed: () {
 
-                  }, "Sou um(a) profissional")
+                  }, textoBotao: "Sou um(a) profissional")
                 ],
               ),
             )

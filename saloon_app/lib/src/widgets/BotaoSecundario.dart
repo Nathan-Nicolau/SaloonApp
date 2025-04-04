@@ -8,7 +8,7 @@ class BotaoSecundario extends StatefulWidget {
    final String textoBotao;
    final bool comBorda;
 
-  const BotaoSecundario(this.onPressed, this.textoBotao,{super.key,  this.comBorda = false});
+   const BotaoSecundario({required this.onPressed, required this.textoBotao, this.comBorda = false,super.key});
 
 
   @override

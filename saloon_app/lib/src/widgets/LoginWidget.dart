@@ -103,7 +103,7 @@ class _LoginwidgetState extends State<Loginwidget> {
                 return false;
               });
             }, textoBotao: "Entrar"),
-            BotaoSecundario(() {}, "Esqueci minha senha")
+            BotaoSecundario(onPressed: () {}, textoBotao: "Esqueci minha senha")
           ],
         ),
       ),

@@ -1,3 +1,5 @@
+import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
+
 class ServicoVO {
   int? idServico;
   int? idSalao;
@@ -6,6 +8,7 @@ class ServicoVO {
   String? tempoDuracao;
   double? valor;
   int? idCategoria;
+  CategoriaServicoEnum? categoriaEnum;
   DateTime? dataCadastro;
   DateTime? dataAtualizacao;
 
@@ -15,6 +18,7 @@ class ServicoVO {
   String? getTempoDuracao() => tempoDuracao;
   double? getValor() => valor;
   int? getIdCategoriaServico() => idCategoria;
+  CategoriaServicoEnum? getCategoriaServicoEnum() => categoriaEnum;
   DateTime? getDataCadastro() => dataCadastro;
   DateTime? getDataAtualizacao() => dataAtualizacao;
 
@@ -40,6 +44,10 @@ class ServicoVO {
 
   void setIdCategoria(int idCategoria) {
     this.idCategoria = idCategoria;
+  }
+
+  void setCategoraServicoEnum(CategoriaServicoEnum categoriaEnum) {
+    this.categoriaEnum = categoriaEnum;
   }
 
   void setDataCadastro(DateTime dataCadastro) {

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/Texto.dart';
@@ -17,6 +18,7 @@ class DialogMensagem extends StatefulWidget {
 class _DialogMensagemState extends State<DialogMensagem> {
   @override
   Widget build(BuildContext context) {
+
     return Dialog(
       backgroundColor: AppColors.branco,
       elevation: 8,
@@ -26,7 +28,7 @@ class _DialogMensagemState extends State<DialogMensagem> {
         children: [
           Padding(padding: EdgeInsets.all(12),
           child: Column(
-            spacing: 12,
+            spacing: 2,
             children: [
               Row(
                 // mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -61,14 +63,14 @@ class _DialogMensagemState extends State<DialogMensagem> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  BotaoPrimario(() {
+                  BotaoPrimario(onPressed: () {
                     widget.onDismiss();
-                  }, "OK")
+                  }, textoBotao: "OK")
                 ],
               )
             ],
           ))
         ],
-    ));
+    )).animate().fadeIn(duration: Duration(milliseconds: 100));
   }
 }

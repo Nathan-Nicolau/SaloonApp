@@ -73,12 +73,12 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                             margin: EdgeInsetsDirectional.fromSTEB(0, 24, 0, 0),
                             child: Column(
                               children: [
-                                BotaoPrimario(() {
+                                BotaoPrimario(onPressed: () {
                                   prosseguirTelaCadastroProprietario();
-                                }, "Testar grátis por 15 dias"),
-                                BotaoSecundario(() {
+                                }, textoBotao: "Testar grátis por 15 dias",larguraExtendida: true),
+                                BotaoSecundario(onPressed: () {
 
-                                },"Assine já")
+                                },textoBotao: "Assine já")
                               ],
                             ),
                           )
