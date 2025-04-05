@@ -110,14 +110,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "2.0.3"
-  flutter_popup:
-    dependency: "direct main"
-    description:
-      name: flutter_popup
-      sha256: "8f93cb4ec7341330ee585b4624ac6596f02587aaefc47297344cb7b5af26aa07"
-      url: "https://pub.dev"
-    source: hosted
-    version: "3.3.4"
   flutter_shaders:
     dependency: transitive
     description:
@@ -163,6 +155,14 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "4.1.2"
+  info_popup:
+    dependency: "direct main"
+    description:
+      name: info_popup
+      sha256: "900821c1269b1b1b80baef73d75e87e550c432d98a80031f4438d0b24e20ae18"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.3.2"
   leak_tracker:
     dependency: transitive
     description:

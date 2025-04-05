@@ -38,7 +38,7 @@ class _DialogMensagemState extends State<DialogMensagem> {
                         spacing: 4,
                         children: [
                           const Icon(Icons.info_outline_rounded, color: AppColors.azulPrincipal),
-                          Texto(texto: "Aviso", tamanhoTexto: 16, peso: FontWeight.bold, cor: AppColors.preto)
+                          Texto(texto: "Aviso", tamanhoTexto: 18, peso: FontWeight.bold, cor: AppColors.preto)
                         ],
                       )),
                   Expanded(child: Row(

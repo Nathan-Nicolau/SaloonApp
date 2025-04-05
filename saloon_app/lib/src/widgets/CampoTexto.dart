@@ -29,12 +29,16 @@ class _CampoTextoState extends State<CampoTexto> {
       children: [
         Text(widget.label, style: GoogleFonts.poppins(
           fontSize: 16,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           color: widget.corTexto
         )),
         TextField(
           textAlign: TextAlign.start,
           onChanged: widget.onTextChange,
+          style: GoogleFonts.poppins(
+            fontSize: 15,
+            fontWeight: FontWeight.w500
+          ),
           controller: TextEditingController(
             text: widget.valorTexto
           ),

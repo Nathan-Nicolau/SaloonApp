@@ -26,8 +26,8 @@ class _DialgoConfirmacaoState extends State<DialogConfirmacao> {
         elevation: 8,
         shadowColor: AppColors.azulPrincipal,
         shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
-        child: Expanded(
-          child:
+        child: Wrap(
+          children: [
             Padding(padding: EdgeInsets.all(12),
                 child: Column(
                   spacing: 2,
@@ -40,7 +40,7 @@ class _DialgoConfirmacaoState extends State<DialogConfirmacao> {
                               spacing: 4,
                               children: [
                                 const Icon(Icons.info_outline_rounded, color: AppColors.azulPrincipal),
-                                Texto(texto: "Aviso", tamanhoTexto: 16, peso: FontWeight.bold, cor: AppColors.preto)
+                                Texto(texto: "Aviso", tamanhoTexto: 18, peso: FontWeight.bold, cor: AppColors.preto)
                               ],
                             )),
                         Expanded(child: Row(
@@ -56,7 +56,7 @@ class _DialgoConfirmacaoState extends State<DialogConfirmacao> {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Padding(padding: EdgeInsets.all(12),
+                        Padding(padding: const EdgeInsets.all(12),
                             child: Center(
                               child: Texto(texto: widget.mensagem, tamanhoTexto: 14, peso: FontWeight.normal, cor: AppColors.preto),
                             ))
@@ -65,20 +65,17 @@ class _DialgoConfirmacaoState extends State<DialogConfirmacao> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        BotaoSecundario(
-                          textoBotao: "Não",
-                          onPressed: () {
-                            widget.onDismiss(false);
-                          },
-                        ),
+                        BotaoSecundario(onPressed: () {
+                          widget.onDismiss(false);
+                        }, textoBotao: "Não",larguraExtendida: false),
                         BotaoPrimario(onPressed: () {
                           widget.onDismiss(true);
-                        }, textoBotao: "Sim"),
+                        }, textoBotao: "Sim",larguraExtendida: false),
                       ],
                     )
                   ],
                 ))
-          ,
+          ],
         )).animate().fadeIn(duration: Duration(milliseconds: 100));
   }
 

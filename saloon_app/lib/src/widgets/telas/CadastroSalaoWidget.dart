@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:info_popup/info_popup.dart';
 import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
+import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
 import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
+import 'package:saloon_app/src/model/vo/DiaSemanaVO.dart';
 import 'package:saloon_app/src/model/vo/SalaoVO.dart';
 import 'package:saloon_app/src/model/vo/ServicoVO.dart';
 import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
@@ -12,6 +15,7 @@ import 'package:saloon_app/src/widgets/dialog/DialogConfirmacao.dart';
 import 'package:saloon_app/src/widgets/dialog/DialogMensagem.dart';
 import '../../utils/AppColors.dart';
 import '../CampoTexto.dart';
+import '../CardInfoServicoAdicionado.dart';
 import '../CardServicoAdicionado.dart';
 import '../ContainerServicoAdicionado.dart';
 
@@ -45,6 +49,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   late List<ServicoVO> listaServicosOutros;
   late ServicoVO servicoAdicionado;
   bool exibirDialogServicoIncorreto = false;
+  bool exibirCardInfoServicoAdicionado = false;
 
   bool cabeloMasculino = false;
   bool cabeloFeminino = false;
@@ -52,6 +57,20 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   bool maquiagem = false;
   bool manicure = false;
   bool outros = false;
+
+  late List<DiaSemanaVO> listaDiasSemanaBase;
+  late List<DiaSemanaVO> listaDiasSemanaSelecionados;
+
+  bool segunda = false;
+  bool terca = false;
+  bool quarta = false;
+  bool quinta= false;
+  bool sexta = false;
+  bool sabado = false;
+  bool domingo = false;
+
+  String horarioAberturaSegunda = "";
+  String horarioFechamentoSegunda = "";
 
   @override
   void initState() {
@@ -64,6 +83,8 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     listaAbasCategorias = [];
     tabController = TabController(length: 6, vsync: this);
     listaServicosTotais = [];
+    listaDiasSemanaBase = DiasSemanaEnum.getListaSemana();
+    listaDiasSemanaSelecionados = [];
   }
 
   void setTextoPaginaAtual(bool proximo) {
@@ -145,6 +166,10 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     });
   }
 
+  void ajustarListaDiasSemanaSelecionados(int codigoDia, bool adicionar) {
+
+  }
+
   bool dadosServicoInformados(ServicoVO servicoVo) {
     var descricaoInformada = servicoVo.getDescricaoServico() != null;
     var valorInformado = servicoVo.getValor() != null;
@@ -156,6 +181,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     setState(() {
       if(dadosServicoInformados(novoServico)) {
         adicionarServicoNaSuaLista(novoServico);
+        // showCardServicoAdicionado();
         servicoAdicionado = ServicoVO();
       } else {
         //Quando os campos de informação do serviço não tiverem sido informados
@@ -193,7 +219,26 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   void showDialogConfirmacao(ServicoVO servicoVo) {
     setState(() {
       showDialog(context: context, builder: (BuildContext context) {
-        return DialogConfirmacao(mensagem: "Ola", onDismiss: (ok) {});
+        var descricaoServico = servicoVo.getDescricaoServico();
+        return DialogConfirmacao(mensagem: "Deseja mesmo excluir o serviço $descricaoServico ?", onDismiss: (ok) {
+          if(ok) {
+            removerServico(servicoVo);
+            Navigator.pop(context);
+          } else {
+            Navigator.pop(context);
+          }
+        });
+      });
+    });
+  }
+
+  void showCardServicoAdicionado() async {
+    setState(() async {
+      exibirCardInfoServicoAdicionado = true;
+      await Future.delayed(const Duration(seconds: 3), () {
+        setState(() {
+          exibirCardInfoServicoAdicionado = false;
+        });
       });
     });
   }
@@ -364,9 +409,15 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
                                 controller: tabController,
                                 children: [
                                   cabeloMasculino ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_MASCULINO, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const InfoCategoriaDesabilitada(),
+                                  Column(
+                                    children: [
+                                      ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_MASCULINO, onRegister: (novoServico) {
+                                        cadastrarNovoServico(novoServico);
+                                      }),
+                                      exibirCardInfoServicoAdicionado ?
+                                          const CardInfoServicoAdicionado(descricaoServico: "teste") : const Row()
+                                    ],
+                                  ) : const InfoCategoriaDesabilitada(),
                                   cabeloFeminino ?
                                   ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_FEMININO, onRegister: (novoServico) {
                                     cadastrarNovoServico(novoServico);
@@ -446,10 +497,77 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
       ),
       //Sexta página - Horário funcionamento
       SizedBox(
-        child: Column(
-          children: [
-            Text("Seus horários aqui")
-          ],
+        child: Padding(padding: EdgeInsets.all(12),
+          child: Column(
+            children: [
+              const Texto(texto: "Informe os dias de funcionamento do seu estabelecimento", tamanhoTexto: 16, peso: FontWeight.normal, cor: AppColors.preto),
+              Row(
+                spacing: 12,
+                children: [
+                  Checkbox(
+                      value: segunda,
+                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                      onChanged: (valor) {
+                        setState(() {
+                          segunda = valor!;
+                        });
+                      }
+                      ),
+                  Texto(texto: "Segunda", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto),
+                  Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                    child: SizedBox(
+                      width: 60,
+                      child: TextField(
+                        style: GoogleFonts.poppins(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500
+                        ),
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                          hintText: "08:00",
+                            hintStyle: GoogleFonts.poppins(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w600,
+                              color: AppColors.azulPrincipal
+                          )
+                        ),
+                        controller: TextEditingController(
+                          text: horarioAberturaSegunda
+                        ),
+                      ),
+                    ),
+                  ),
+                  Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
+                    child: SizedBox(
+                      width: 60,
+                      child: TextField(
+                        style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w500
+                        ),
+                        textAlign: TextAlign.center,
+                        decoration: InputDecoration(
+                            hintText: "08:00",
+                            hintStyle: GoogleFonts.poppins(
+                                fontSize: 12,
+                                fontWeight: FontWeight.w600,
+                                color: AppColors.azulPrincipal
+                            )
+                        ),
+                        controller: TextEditingController(
+                            text: horarioFechamentoSegunda
+                        ),
+                      ),
+                    ),
+                  )
+                ],
+              )
+            ],
+          )
         ),
       )
     ];

@@ -7,8 +7,9 @@ class BotaoSecundario extends StatefulWidget {
    final VoidCallback onPressed;
    final String textoBotao;
    final bool comBorda;
+   final bool larguraExtendida;
 
-   const BotaoSecundario({required this.onPressed, required this.textoBotao, this.comBorda = false,super.key});
+   const BotaoSecundario({required this.onPressed, required this.textoBotao, this.larguraExtendida = false,  this.comBorda = false,super.key});
 
 
   @override
@@ -21,7 +22,7 @@ class _BotaoSecundarioState extends State<BotaoSecundario> {
   Widget build(BuildContext context) {
 
     return SizedBox(
-      width: double.infinity,
+      width: widget.larguraExtendida ? double.infinity : null,
       child: ElevatedButton(
         onPressed: widget.onPressed,
         style: ButtonStyle(
