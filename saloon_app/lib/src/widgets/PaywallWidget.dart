@@ -78,7 +78,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                 }, textoBotao: "Testar grátis por 15 dias",larguraExtendida: true),
                                 BotaoSecundario(onPressed: () {
 
-                                },textoBotao: "Assine já")
+                                },textoBotao: "Assine já", larguraExtendida: true)
                               ],
                             ),
                           )

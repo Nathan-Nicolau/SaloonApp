@@ -26,7 +26,7 @@ class _DialogMensagemState extends State<DialogMensagem> {
       shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(12))),
       child: Wrap(
         children: [
-          Padding(padding: EdgeInsets.all(12),
+          Padding(padding: const EdgeInsets.all(12),
           child: Column(
             spacing: 2,
             children: [

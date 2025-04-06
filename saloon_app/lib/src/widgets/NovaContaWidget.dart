@@ -64,13 +64,13 @@ class _NovaContaWidgetState extends State<NovaContaWidget> {
                 children: [
                   BotaoSecundario(onPressed: () {
                     navegarTelaAdministrador();
-                  }, textoBotao: "Sou administrador(a) de salão"),
+                  }, textoBotao: "Sou administrador(a) de salão", larguraExtendida: true),
                   BotaoSecundario(onPressed: () {
 
-                  },textoBotao:  "Sou um(a) cliente"),
+                  },textoBotao:  "Sou um(a) cliente", larguraExtendida: true),
                   BotaoSecundario(onPressed: () {
 
-                  }, textoBotao: "Sou um(a) profissional")
+                  }, textoBotao: "Sou um(a) profissional", larguraExtendida: true)
                 ],
               ),
             )

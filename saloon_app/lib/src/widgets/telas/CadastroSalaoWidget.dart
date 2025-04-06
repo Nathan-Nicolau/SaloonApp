@@ -5,6 +5,7 @@ import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
 import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
 import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
 import 'package:saloon_app/src/model/vo/DiaSemanaVO.dart';
+import 'package:saloon_app/src/model/vo/HorarioFuncionamentoVO.dart';
 import 'package:saloon_app/src/model/vo/SalaoVO.dart';
 import 'package:saloon_app/src/model/vo/ServicoVO.dart';
 import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
@@ -18,6 +19,7 @@ import '../CampoTexto.dart';
 import '../CardInfoServicoAdicionado.dart';
 import '../CardServicoAdicionado.dart';
 import '../ContainerServicoAdicionado.dart';
+import '../dialog/DialogSelecaoHora.dart';
 
 class CadastroSalaoWidget extends StatefulWidget {
   const CadastroSalaoWidget({super.key});
@@ -60,6 +62,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
 
   late List<DiaSemanaVO> listaDiasSemanaBase;
   late List<DiaSemanaVO> listaDiasSemanaSelecionados;
+  late List<HorarioFuncionamentoVO> listaHorariosFuncionamento;
 
   bool segunda = false;
   bool terca = false;
@@ -69,8 +72,28 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   bool sabado = false;
   bool domingo = false;
 
-  String horarioAberturaSegunda = "";
-  String horarioFechamentoSegunda = "";
+  HorarioFuncionamentoVO horarioSegunda = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioTerca = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioQuarta = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioQuinta = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioSexta = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioSabado = HorarioFuncionamentoVO();
+  HorarioFuncionamentoVO horarioDomingo = HorarioFuncionamentoVO();
+
+  late TextEditingController segundaAberturaController;
+  late TextEditingController segundaFechamentoController;
+  late TextEditingController tercaAberturaController;
+  late TextEditingController tercaFechamentoController;
+  late TextEditingController quartaAberturaController;
+  late TextEditingController quartaFechamentoController;
+  late TextEditingController quintaAberturaController;
+  late TextEditingController quintaFechamentoController;
+  late TextEditingController sextaAberturaController;
+  late TextEditingController sextaFechamentoController;
+  late TextEditingController sabadoAberturaController;
+  late TextEditingController sabadoFechamentoController;
+  late TextEditingController domingoAberturaController;
+  late TextEditingController domingoFechamentoController;
 
   @override
   void initState() {
@@ -85,6 +108,21 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     listaServicosTotais = [];
     listaDiasSemanaBase = DiasSemanaEnum.getListaSemana();
     listaDiasSemanaSelecionados = [];
+    listaHorariosFuncionamento = [];
+    segundaAberturaController = TextEditingController(text: horarioSegunda.getHorarioAbertura());
+    segundaFechamentoController = TextEditingController(text: horarioSegunda.getHorarioFechamento());
+    tercaAberturaController = TextEditingController(text: horarioTerca.getHorarioAbertura());
+    tercaFechamentoController = TextEditingController(text: horarioTerca.getHorarioFechamento());
+    quartaAberturaController = TextEditingController(text: horarioQuarta.getHorarioAbertura());
+    quartaFechamentoController = TextEditingController(text: horarioQuarta.getHorarioFechamento());
+    quintaAberturaController = TextEditingController(text: horarioQuinta.getHorarioAbertura());
+    quintaFechamentoController = TextEditingController(text: horarioQuinta.getHorarioFechamento());
+    sextaAberturaController = TextEditingController(text: horarioSexta.getHorarioAbertura());
+    sextaFechamentoController = TextEditingController(text: horarioSexta.getHorarioFechamento());
+    sabadoAberturaController = TextEditingController(text: horarioSabado.getHorarioAbertura());
+    sabadoFechamentoController = TextEditingController(text: horarioSabado.getHorarioFechamento());
+    domingoAberturaController = TextEditingController(text: horarioDomingo.getHorarioAbertura());
+    domingoFechamentoController = TextEditingController(text: horarioDomingo.getHorarioFechamento());
   }
 
   void setTextoPaginaAtual(bool proximo) {
@@ -166,8 +204,13 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     });
   }
 
-  void ajustarListaDiasSemanaSelecionados(int codigoDia, bool adicionar) {
-
+  void ajustarListaDiasSemanaSelecionados(DiasSemanaEnum diaSemanaEnum, bool adicionar) {
+    setState(() {
+      switch(diaSemanaEnum) {
+        case DiasSemanaEnum.SEGUNDA_FEIRA:
+        default:
+      }
+    });
   }
 
   bool dadosServicoInformados(ServicoVO servicoVo) {
@@ -198,16 +241,8 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     listaServicosTotais.add(servico);
   }
 
-  bool categoriaFoiSelecionada(CategoriaServicoEnum categoriaEnum) {
-    bool categoriaFoiSelecionada = false;
-    setState(() {
-      for(var categoria in listaCategoriasSelecionadas) {
-        if(categoria.idCategoriaServico == categoriaEnum.codigo) {
-          categoriaFoiSelecionada = true;
-        }
-      }
-      });
-    return categoriaFoiSelecionada;
+  void adicionarDiaSemanaNaSuaLista(DiaSemanaVO diaSemana) {
+    listaDiasSemanaSelecionados.add(diaSemana);
   }
 
   void removerServico(ServicoVO servicoParaRemover) {
@@ -497,75 +532,590 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
       ),
       //Sexta página - Horário funcionamento
       SizedBox(
-        child: Padding(padding: EdgeInsets.all(12),
+        child: Padding(padding: const EdgeInsets.all(12),
           child: Column(
             children: [
-              const Texto(texto: "Informe os dias de funcionamento do seu estabelecimento", tamanhoTexto: 16, peso: FontWeight.normal, cor: AppColors.preto),
-              Row(
-                spacing: 12,
+              const Padding(padding: EdgeInsets.fromLTRB(8, 0, 8, 8),
+              child: Column(
                 children: [
-                  Checkbox(
-                      value: segunda,
-                      shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
-                      onChanged: (valor) {
-                        setState(() {
-                          segunda = valor!;
-                        });
-                      }
-                      ),
-                  Texto(texto: "Segunda", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto),
-                  Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                    child: SizedBox(
-                      width: 60,
-                      child: TextField(
-                        style: GoogleFonts.poppins(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500
+                  Texto(texto: "Informe os dias de funcionamento do seu estabelecimento", tamanhoTexto: 14, peso: FontWeight.normal, cor: AppColors.preto),
+                  Texto(texto: "Ao informar os horários, prefira por valores de hora completa, como 08:00 e 18:00", tamanhoTexto: 12, peso: FontWeight.w300, cor: AppColors.preto),
+                ],
+              )),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 4, 12, 4),
+                child: Row(
+                  children: [
+                    Texto(texto: "Você pode alterar essa informações depois", tamanhoTexto: 12, peso: FontWeight.w300, cor: AppColors.preto),
+                  ],
+                ),
+              ),
+              //Segunda-feira
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Checkbox(
+                            value: segunda,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                segunda = valor!;
+                                if(segunda) {
+                                  showDialog(context: context, builder: (builder) {
+                                    return DialogSelecaoHora(onHoraSelecionada: (hora) {
+
+                                    });
+                                  });
+                                }
+                              });
+                            }
                         ),
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                          hintText: "08:00",
-                            hintStyle: GoogleFonts.poppins(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w600,
-                              color: AppColors.azulPrincipal
-                          )
-                        ),
-                        controller: TextEditingController(
-                          text: horarioAberturaSegunda
-                        ),
-                      ),
+                        const Texto(texto: "Segunda", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto),
+                      ],
                     ),
                   ),
-                  Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(12, 0, 0, 0),
-                    child: SizedBox(
-                      width: 60,
-                      child: TextField(
-                        style: GoogleFonts.poppins(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500
-                        ),
-                        textAlign: TextAlign.center,
-                        decoration: InputDecoration(
-                            hintText: "08:00",
-                            hintStyle: GoogleFonts.poppins(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: AppColors.azulPrincipal
-                            )
-                        ),
-                        controller: TextEditingController(
-                            text: horarioFechamentoSegunda
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioSegunda.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: segunda,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: segundaAberturaController,
                         ),
                       ),
-                    ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioSegunda.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: segunda,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: segundaFechamentoController,
+                        ),
+                      )
+                    ],
                   )
                 ],
-              )
+              ),
+              //Terça-feira
+              Row(
+                children: [
+                  SizedBox(
+                    width:120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: terca,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                terca = valor!;
+                              });
+                            }
+                        ),
+                        const Texto(texto: "Terça", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto)
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioTerca.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: terca,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: tercaAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioTerca.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: terca,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: tercaFechamentoController,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              //Quarta feira
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: quarta,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                quarta = valor!;
+                              });
+                            }
+                        ),
+                        const Texto(texto: "Quarta", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto)
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioQuarta.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: quarta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: quartaAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioQuarta.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: quarta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: quintaAberturaController,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              //Quinta-feira
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: quinta,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                quinta = valor!;
+                              });
+                            }
+                        ),
+                        const Texto(texto: "Quinta", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto)
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioQuinta.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: quinta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: quintaAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioQuinta.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: quinta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: quintaFechamentoController,
+                        ),
+                      )],
+                  )
+                ],
+              ),
+              //Sexta-feira
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: sexta,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                sexta = valor!;
+                              });
+                            }
+                        ),const Texto(texto: "Sexta", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto)
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioSexta.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: sexta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: sextaAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioSexta.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: sexta,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: sextaFechamentoController,
+                        ),
+                      )],
+                  )
+                ],
+              ),
+              //Sábado
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: sabado,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                sabado = valor!;
+                                if(!sabado) {
+                                  horarioSabado.setHorarioAbertura("");
+                                  horarioSabado.setHorarioFechamento("");
+                                }
+                              });
+                            }
+                        ),
+                        const Texto(texto: "Sábado", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto)
+                      ]
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          autocorrect: false,
+                          keyboardType: TextInputType.number,
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioSabado.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: sabado,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: sabadoAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          autocorrect: false,
+                          keyboardType: TextInputType.number,
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioSabado.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: sabado,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "18:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: sabadoFechamentoController,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
+              //Domingo
+              Row(
+                children: [
+                  SizedBox(
+                    width: 120,
+                    child: Row(
+                      children: [
+                        Checkbox(
+                            value: domingo,
+                            shape: const RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(4))),
+                            onChanged: (valor) {
+                              setState(() {
+                                domingo = valor!;
+                                if(!domingo) {
+                                  horarioDomingo.setHorarioAbertura("");
+                                  horarioDomingo.setHorarioFechamento("");
+                                }
+                              });
+                            }
+                        ),
+                        const Texto(texto: "Domingo", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto),
+                      ],
+                    ),
+                  ),
+                  Row(
+                    children: [
+                      const Texto(texto: "de", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          autocorrect: false,
+                          keyboardType: TextInputType.number,
+                          onChanged: (valorAbertura) {
+                            setState(() {
+                              horarioDomingo.setHorarioAbertura(valorAbertura);
+                            });
+                          },
+                          enabled: domingo,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "08:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: domingoAberturaController,
+                        ),
+                      ),
+                      const Texto(texto: "às", tamanhoTexto: 14, peso: FontWeight.w300, cor: AppColors.preto),
+                      SizedBox(
+                        width: 64,
+                        child: TextField(
+                          autocorrect: false,
+                          keyboardType: TextInputType.number,
+                          onChanged: (valorFechamento) {
+                            setState(() {
+                              horarioDomingo.setHorarioFechamento(valorFechamento);
+                            });
+                          },
+                          enabled: domingo,
+                          style: GoogleFonts.poppins(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500
+                          ),
+                          textAlign: TextAlign.center,
+                          decoration: InputDecoration(
+                              hintText: "12:00",
+                              hintStyle: GoogleFonts.poppins(
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                  color: AppColors.cinza
+                              )
+                          ),
+                          controller: domingoFechamentoController,
+                        ),
+                      )
+                    ],
+                  )
+                ],
+              ),
             ],
           )
         ),

@@ -8,6 +8,16 @@ class HorarioFuncionamentoVO {
   DateTime? dataCadastro;
   DateTime? dataAtualizacao;
 
+  //Para o cadastro inicial dos horários do estabelecimento
+  HorarioFuncionamentoVO.simples() {
+    horarioAbertura;
+    horarioFechamento;
+    diaSemanaFuncionamento;
+    dataCadastro;
+  }
+
+  HorarioFuncionamentoVO();
+
   int? getIdHorarioFuncionamento() => idHorarioFuncionamento;
   String? getHorarioAbertura() => horarioAbertura;
   String? getHorarioSaida() => horarioSaida;

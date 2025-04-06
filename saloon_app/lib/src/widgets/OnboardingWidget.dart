@@ -79,10 +79,10 @@ class _OnboardingWidgetState extends State<OnboardingWidget> {
                         }, textoBotao: "Agendamento rápido", larguraExtendida: true),
                         BotaoSecundario(onPressed: () {
                           prosseguirNovaConta();
-                        }, textoBotao: "Criar nova conta"),
+                        }, textoBotao: "Criar nova conta", larguraExtendida: true),
                         BotaoSecundario(onPressed: () {
                           prosseguirTelaLogin();
-                        },textoBotao: "Já tenho conta")
+                        },textoBotao: "Já tenho conta",larguraExtendida: true)
                       ],
                     ),
                   ),

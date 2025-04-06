@@ -4,6 +4,7 @@ import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
 
 enum CategoriaServicoEnum {
 
+  //TODO - Adicionar barba
   CABELO_MASCULINO(1,"Cabelo masculino"),
   CABELO_FEMININO(2,"Cabelo Feminino"),
   DEPILACAO(3,"Depilação"),
