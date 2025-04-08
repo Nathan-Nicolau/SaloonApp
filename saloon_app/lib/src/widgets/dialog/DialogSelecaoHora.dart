@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
+import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
+import 'package:saloon_app/src/widgets/BotaoSecundario.dart';
 
 class DialogSelecaoHora extends StatefulWidget {
 
@@ -17,6 +19,7 @@ class _DialogSelecaoHoraState extends State<DialogSelecaoHora> {
 
   Future<void> _selecionarHora(BuildContext context) async {
     final TimeOfDay? hora = await showTimePicker(
+      initialEntryMode: TimePickerEntryMode.inputOnly,
       context: context,
       initialTime: horaSelecionada,
     );
@@ -24,7 +27,6 @@ class _DialogSelecaoHoraState extends State<DialogSelecaoHora> {
       setState(() {
         horaSelecionada = hora;
       });
-      widget.onHoraSelecionada(hora);
     }
   }
 
@@ -45,9 +47,19 @@ class _DialogSelecaoHoraState extends State<DialogSelecaoHora> {
                 style: const TextStyle(fontSize: 16),
               ),
               const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () => _selecionarHora(context),
-                child: const Text("Selecionar Hora"),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  BotaoSecundario(onPressed: () {
+                    _selecionarHora(context);
+                  }, textoBotao: "Selecionar a hora"),
+                  BotaoPrimario(onPressed: () {
+                    setState(() {
+                      widget.onHoraSelecionada(horaSelecionada);
+                      Navigator.pop(context);
+                    });
+                  }, textoBotao: "OK")
+                ],
               ),
             ],
           )
