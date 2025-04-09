@@ -1,3 +1,6 @@
+import 'package:saloon_app/src/model/vo/HorarioFuncionamentoCompletoVO.dart';
+import 'package:saloon_app/src/model/vo/ProprietarioSalaoVO.dart';
+
 class SalaoVO {
   int? idSalao;
   String? nomeSalao;
@@ -9,8 +12,17 @@ class SalaoVO {
   String? codigoCompartilhamento;
   String? dataCadastroSalao;
   String? dataAtualizacaoCadastro;
+  ProprietarioVO? proprietarioVO;
+  HorarioFuncionamentoCompletoVO? horarioFuncionamentoCompletoVO;
 
   SalaoVO();
+
+  SalaoVO.cadastro() {
+    nomeSalao;
+    enderecoSalao;
+    proprietarioVO;
+    horarioFuncionamentoCompletoVO;
+  }
 
   int? getIdSalao() => idSalao;
   String? getNomeSalao() => nomeSalao;
@@ -22,6 +34,8 @@ class SalaoVO {
   String? getDescricaoFuncionamento() => descricaoFuncionamento;
   String? getDataCadastro() => dataCadastroSalao;
   String? getDataAtualizacao() => dataAtualizacaoCadastro;
+  ProprietarioVO? getProprietario() => proprietarioVO;
+  HorarioFuncionamentoCompletoVO? getHorarioFuncionamento() => horarioFuncionamentoCompletoVO;
 
   void setIdSalao(int idSalao) {
     this.idSalao = idSalao;
@@ -61,6 +75,14 @@ class SalaoVO {
 
   void setDataAtualizacaoCadastro(String dataAtualizacaoCadastro) {
     this.dataAtualizacaoCadastro = dataAtualizacaoCadastro;
+  }
+
+  void setProprietarioVo(ProprietarioVO proprietarioVo) {
+    this.proprietarioVO = proprietarioVo;
+  }
+
+  void setHorarioFuncionamento(HorarioFuncionamentoCompletoVO horarioFuncionamento) {
+    this.horarioFuncionamentoCompletoVO = horarioFuncionamento;
   }
 
 }

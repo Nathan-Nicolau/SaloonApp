@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/BotaoSecundario.dart';
+import 'package:saloon_app/src/widgets/Texto.dart';
 
 class DialogSelecaoHora extends StatefulWidget {
 
@@ -42,10 +43,15 @@ class _DialogSelecaoHoraState extends State<DialogSelecaoHora> {
           Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
-              Text(
-                "Hora Selecionada: ${horaSelecionada.format(context)}",
-                style: const TextStyle(fontSize: 16),
-              ),
+              Padding(padding: EdgeInsets.fromLTRB(12, 12, 12, 0) ,child:
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Texto(texto: "Horário selecionado:", tamanhoTexto: 14, peso: FontWeight.normal, cor: AppColors.preto),
+                  Texto(texto: " ${horaSelecionada.format(context)}", tamanhoTexto: 16, peso: FontWeight.w600, cor: AppColors.azulPrincipal)
+                ],
+              )),
               const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:saloon_app/src/widgets/telas/CadastroSalaoWidget.dart';
+
+import '../widgets/telas/cadastro/CadastroSalaoWidget.dart';
 
 class CadastroSalaoScreen extends StatelessWidget {
   const CadastroSalaoScreen({super.key});

@@ -22,6 +22,14 @@ class CampoTexto extends StatefulWidget {
 
 class _CampoTextoState extends State<CampoTexto> {
 
+  late TextEditingController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = TextEditingController(text: widget.valorTexto);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -39,9 +47,7 @@ class _CampoTextoState extends State<CampoTexto> {
             fontSize: 15,
             fontWeight: FontWeight.w500
           ),
-          controller: TextEditingController(
-            text: widget.valorTexto
-          ),
+          controller: controller,
           decoration: InputDecoration(
               icon: widget.iconeInicial,
               hintText: widget.placeholder,

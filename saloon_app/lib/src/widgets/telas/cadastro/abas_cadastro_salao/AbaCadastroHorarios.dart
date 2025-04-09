@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
 import 'package:saloon_app/src/model/vo/HorarioFuncionamentoCompletoVO.dart';
-
-import '../../model/vo/HorarioFuncionamentoVO.dart';
-import '../../utils/AppColors.dart';
-import '../Texto.dart';
-import '../dialog/DialogSelecaoHora.dart';
+import '../../../../model/vo/HorarioFuncionamentoVO.dart';
+import '../../../../utils/AppColors.dart';
+import '../../../Texto.dart';
+import '../../../dialog/DialogSelecaoHora.dart';
 
 class AbaCadastroHorarios extends StatefulWidget {
 
-  Function(HorarioFuncionamentoCompletoVO horarioCompleto) setHorarios;
-  AbaCadastroHorarios({required this.setHorarios, super.key});
+  Function(HorarioFuncionamentoVO horarioEditado) setHorario;
+
+  AbaCadastroHorarios({required this.setHorario, super.key});
 
   @override
   State<AbaCadastroHorarios> createState() => _AbaCadastroHorariosState();
@@ -68,10 +69,15 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
     domingoFechamentoController = TextEditingController(text: horarioDomingo.getHorarioFechamento());
   }
 
-
-
   @override
   Widget build(BuildContext context) {
+
+    void salvarHorarioAlterado(HorarioFuncionamentoVO horario) {
+      setState(() {
+        widget.setHorario(horario);
+      });
+    }
+
     return SizedBox(
       child: Padding(padding: const EdgeInsets.all(12),
           child: Column(
@@ -147,6 +153,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSegunda.setHorarioAbertura(hora.format(context));
                                             segundaAberturaController.text = horarioSegunda.getHorarioAbertura().toString();
+                                            horarioSegunda.setDiaSemanaEnum(DiasSemanaEnum.SEGUNDA_FEIRA);
+                                            salvarHorarioAlterado(horarioSegunda);
                                           });
                                         });
                                       });
@@ -189,6 +197,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSegunda.setHorarioFechamento(hora.format(context));
                                             segundaFechamentoController.text = horarioSegunda.getHorarioFechamento().toString();
+                                            horarioSegunda.setDiaSemanaEnum(DiasSemanaEnum.SEGUNDA_FEIRA);
+                                            salvarHorarioAlterado(horarioSegunda);
                                           });
                                         });
                                       });
@@ -265,6 +275,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                             setState(() {
                                               horarioTerca.setHorarioAbertura(hora.format(context));
                                               tercaAberturaController.text = horarioTerca.getHorarioAbertura().toString();
+                                              horarioTerca.setDiaSemanaEnum(DiasSemanaEnum.TERCA_FEIRA);
+                                              salvarHorarioAlterado(horarioTerca);
                                             });
                                           });
                                         });
@@ -307,6 +319,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                             setState(() {
                                               horarioTerca.setHorarioFechamento(hora.format(context));
                                               tercaFechamentoController.text = horarioTerca.getHorarioFechamento().toString();
+                                              horarioTerca.setDiaSemanaEnum(DiasSemanaEnum.TERCA_FEIRA);
+                                              salvarHorarioAlterado(horarioTerca);
                                             });
                                           });
                                         });
@@ -382,6 +396,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioQuarta.setHorarioAbertura(hora.format(context));
                                             quartaAberturaController.text = horarioQuarta.getHorarioAbertura().toString();
+                                            horarioQuarta.setDiaSemanaEnum(DiasSemanaEnum.QUARTA_FEIRA);
+                                            salvarHorarioAlterado(horarioQuarta);
                                           });
                                         });
                                       });
@@ -424,6 +440,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioQuarta.setHorarioFechamento(hora.format(context));
                                             quartaFechamentoController.text = horarioQuarta.getHorarioFechamento().toString();
+                                            horarioQuarta.setDiaSemanaEnum(DiasSemanaEnum.QUARTA_FEIRA);
+                                            salvarHorarioAlterado(horarioQuarta);
                                           });
                                         });
                                       });
@@ -498,6 +516,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                             setState(() {
                                               horarioQuinta.setHorarioAbertura(hora.format(context));
                                               quintaAberturaController.text = horarioQuinta.getHorarioAbertura().toString();
+                                              horarioQuinta.setDiaSemanaEnum(DiasSemanaEnum.QUINTA_FEIRA);
+                                              salvarHorarioAlterado(horarioQuinta);
                                             });
                                           });
                                         });
@@ -540,6 +560,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                             setState(() {
                                               horarioQuinta.setHorarioFechamento(hora.format(context));
                                               quintaFechamentoController.text = horarioQuinta.getHorarioFechamento.toString();
+                                              horarioQuinta.setDiaSemanaEnum(DiasSemanaEnum.QUINTA_FEIRA);
+                                              salvarHorarioAlterado(horarioQuinta);
                                             });
                                           });
                                         });
@@ -613,6 +635,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSexta.setHorarioAbertura(hora.format(context));
                                             sextaAberturaController.text = horarioSexta.getHorarioAbertura().toString();
+                                            horarioSexta.setDiaSemanaEnum(DiasSemanaEnum.SEXTA_FEIRA);
+                                            salvarHorarioAlterado(horarioSexta);
                                           });
                                         });
                                       });
@@ -655,6 +679,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSexta.setHorarioFechamento(hora.format(context));
                                             sextaFechamentoController.text = horarioSexta.getHorarioFechamento().toString();
+                                            horarioSexta.setDiaSemanaEnum(DiasSemanaEnum.SEXTA_FEIRA);
+                                            salvarHorarioAlterado(horarioSexta);
                                           });
                                         });
                                       });
@@ -734,6 +760,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSabado.setHorarioAbertura(hora.format(context));
                                             sabadoAberturaController.text = horarioSabado.getHorarioAbertura().toString();
+                                            horarioSabado.setDiaSemanaEnum(DiasSemanaEnum.SABADO);
+                                            salvarHorarioAlterado(horarioSabado);
                                           });
                                         });
                                       });
@@ -776,6 +804,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioSabado.setHorarioFechamento(hora.format(context));
                                             sabadoFechamentoController.text = horarioSabado.getHorarioFechamento().toString();
+                                            horarioSabado.setDiaSemanaEnum(DiasSemanaEnum.SABADO);
+                                            salvarHorarioAlterado(horarioSabado);
                                           });
                                         });
                                       });
@@ -855,6 +885,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioDomingo.setHorarioAbertura(hora.format(context));
                                             domingoAberturaController.text = horarioDomingo.getHorarioAbertura().toString();
+                                            horarioDomingo.setDiaSemanaEnum(DiasSemanaEnum.DOMINGO);
+                                            salvarHorarioAlterado(horarioDomingo);
                                           });
                                         });
                                       });
@@ -897,6 +929,8 @@ class _AbaCadastroHorariosState extends State<AbaCadastroHorarios> {
                                           setState(() {
                                             horarioDomingo.setHorarioFechamento(hora.format(context));
                                             domingoFechamentoController.text = horarioDomingo.getHorarioFechamento().toString();
+                                            horarioDomingo.setDiaSemanaEnum(DiasSemanaEnum.DOMINGO);
+                                            salvarHorarioAlterado(horarioDomingo);
                                           });
                                         });
                                       });

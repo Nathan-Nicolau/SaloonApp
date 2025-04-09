@@ -1,29 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_animate/flutter_animate.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:info_popup/info_popup.dart';
 import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
 import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
 import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
 import 'package:saloon_app/src/model/vo/DiaSemanaVO.dart';
 import 'package:saloon_app/src/model/vo/HorarioFuncionamentoCompletoVO.dart';
-import 'package:saloon_app/src/model/vo/HorarioFuncionamentoVO.dart';
+import 'package:saloon_app/src/model/vo/ProprietarioSalaoVO.dart';
 import 'package:saloon_app/src/model/vo/SalaoVO.dart';
 import 'package:saloon_app/src/model/vo/ServicoVO.dart';
 import 'package:saloon_app/src/model/vo/UsuarioVO.dart';
+import 'package:saloon_app/src/utils/AppUtils.dart';
 import 'package:saloon_app/src/utils/UtilsUI.dart';
 import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/Texto.dart';
-import 'package:saloon_app/src/widgets/dialog/DialogConfirmacao.dart';
 import 'package:saloon_app/src/widgets/dialog/DialogMensagem.dart';
-import 'package:saloon_app/src/widgets/telas/AbaCadastroHorarios.dart';
-import '../../utils/AppColors.dart';
-import '../CampoTexto.dart';
-import '../CardInfoServicoAdicionado.dart';
-import '../CardServicoAdicionado.dart';
-import '../ContainerServicoAdicionado.dart';
-import '../HorarioFuncionamento.dart';
-import '../dialog/DialogSelecaoHora.dart';
+import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroHorarios.dart';
+import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroServicos.dart';
+import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaServicosCadastrados.dart';
+import '../../../utils/AppColors.dart';
+import '../../CampoTexto.dart';
 
 class CadastroSalaoWidget extends StatefulWidget {
   const CadastroSalaoWidget({super.key});
@@ -81,7 +75,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     listaServicosTotais = [];
     listaDiasSemanaBase = DiasSemanaEnum.getListaSemana();
     listaDiasSemanaSelecionados = [];
-
+    horarioFuncionamentoCompletoVO = HorarioFuncionamentoCompletoVO();
   }
 
   void setTextoPaginaAtual(bool proximo) {
@@ -103,6 +97,9 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     setState(() {
       if(pagina < 5) {
         pagina++;
+      }
+      if(pagina == 5) {
+        construirObjetoSalaoCadastro();
       }
     });
   }
@@ -182,7 +179,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   void cadastrarNovoServico(ServicoVO novoServico) {
     setState(() {
       if(dadosServicoInformados(novoServico)) {
-        adicionarServicoNaSuaLista(novoServico);
+        listaServicosTotais.add(novoServico);
         // showCardServicoAdicionado();
         servicoAdicionado = ServicoVO();
       } else {
@@ -196,10 +193,6 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     });
   }
 
-  void adicionarServicoNaSuaLista(ServicoVO servico) {
-    listaServicosTotais.add(servico);
-  }
-
   void adicionarDiaSemanaNaSuaLista(DiaSemanaVO diaSemana) {
     listaDiasSemanaSelecionados.add(diaSemana);
   }
@@ -207,22 +200,6 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   void removerServico(ServicoVO servicoParaRemover) {
     setState(() {
       listaServicosTotais.remove(servicoParaRemover);
-    });
-  }
-
-  void showDialogConfirmacao(ServicoVO servicoVo) {
-    setState(() {
-      showDialog(context: context, builder: (BuildContext context) {
-        var descricaoServico = servicoVo.getDescricaoServico();
-        return DialogConfirmacao(mensagem: "Deseja mesmo excluir o serviço $descricaoServico ?", onDismiss: (ok) {
-          if(ok) {
-            removerServico(servicoVo);
-            Navigator.pop(context);
-          } else {
-            Navigator.pop(context);
-          }
-        });
-      });
     });
   }
 
@@ -235,6 +212,22 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
         });
       });
     });
+  }
+
+  //Essa função deve ser chamada quando o cadatro estiver pronto para ser finalizado
+  void construirObjetoSalaoCadastro() {
+    setState(() {
+      var proprietarioSalao = ProprietarioVO();
+      proprietarioSalao.setNomeProprietario(usuario.getNomeUsuario());
+      proprietarioSalao.setDataCadastroProprietario(AppUtils.getDataAtualFormatada());
+      salao.setProprietarioVo(proprietarioSalao);
+      salao.setHorarioFuncionamento(horarioFuncionamentoCompletoVO);
+      prosseguirTelaConfirmacaoCadastro();
+    });
+  }
+
+  void prosseguirTelaConfirmacaoCadastro() {
+    Navigator.pushNamed(context, "/confirmacaoCadastroProprietario", arguments: salao);
   }
 
   @override
@@ -250,16 +243,24 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
             children: [
               //Nome de cadastro do usuário proprietário
               CampoTexto(valorTexto: usuario.getNomeUsuario(), label: "Nome do(a) responsável", placeholder: "Seu nome de usuário", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                usuario.setNomeUsuario(valorTexto);
+                setState(() {
+                  usuario.setNomeUsuario(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: usuario.getEmailUsuario(), label: "E-mail", placeholder: "Digite seu e-mail de acesso", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                usuario.setEmailUsuario(valorTexto);
+                setState(() {
+                  usuario.setEmailUsuario(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: usuario.getTelefoneUsuario(), label: "Telefone", placeholder: "Digite seu número de telefone", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                usuario.setTelefoneUsuario(valorTexto);
+                setState(() {
+                  usuario.setTelefoneUsuario(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: usuario.getSenhausuario(), label: "Senha", placeholder: "Mínimo de 8 caracteres", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                usuario.setSenhaUsuario(valorTexto);
+                setState(() {
+                  usuario.setSenhaUsuario(valorTexto);
+                });
               }),
             ]
         )
@@ -272,16 +273,24 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
             children: [
               //Nome de cadastro do usuário proprietário
               CampoTexto(valorTexto: "", label: "Nome do estabelecimento", placeholder: "Nome do seu salão", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                salao.setNomeSalao(valorTexto);
+                setState(() {
+                  salao.setNomeSalao(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: "", label: "CEP", placeholder: "Digite apenas os números", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                salao.setCepEndereco(valorTexto);
+                setState(() {
+                  salao.setCepEndereco(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: "", label: "Endereço", placeholder: "Endereço do local", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                salao.setEnderecoSalao(valorTexto);
+                setState(() {
+                  salao.setEnderecoSalao(valorTexto);
+                });
               }),
               CampoTexto(valorTexto: "", label: "Número", placeholder: "Do endereço", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                salao.setNumeroEndereco(valorTexto);
+                setState(() {
+                  salao.setNumeroEndereco(valorTexto);
+                });
               })
             ]
         ),
@@ -377,122 +386,44 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
         ),
       ),
       //Quarta página - Serviços oferecidos
-      SizedBox(
-        height: double.infinity,
-          child: DefaultTabController(length: listaCategoriasSelecionadas.length,
-              child: Column(
-                children: [
-                  TabBar(
-                      controller: tabController,
-                      isScrollable: true,
-                      tabs: const [
-                        SizedBox(height: 30, child: Texto(texto: "Cabelo masculino", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal)),
-                        SizedBox(height: 30, child: Texto(texto: "Cabelo feminino", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal)),
-                        SizedBox(height: 30, child: Texto(texto: "Depilação", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal)),
-                        SizedBox(height: 30, child: Texto(texto: "Manicure", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal)),
-                        SizedBox(height: 30, child: Texto(texto: "Maquiagem", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal)),
-                        SizedBox(height: 30, child: Texto(texto: "Outros", tamanhoTexto: 14, peso: FontWeight.w400, cor: AppColors.azulPrincipal))
-                      ]
-                  ),
-                  Expanded(
-                    child: LayoutBuilder(
-                        builder: (BuildContext context, BoxConstraints constraints) {
-                          return SizedBox(
-                            height: constraints.maxHeight,
-                            child: TabBarView(
-                                controller: tabController,
-                                children: [
-                                  cabeloMasculino ?
-                                  Column(
-                                    children: [
-                                      ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_MASCULINO, onRegister: (novoServico) {
-                                        cadastrarNovoServico(novoServico);
-                                      }),
-                                      exibirCardInfoServicoAdicionado ?
-                                          const CardInfoServicoAdicionado(descricaoServico: "teste") : const Row()
-                                    ],
-                                  ) : const InfoCategoriaDesabilitada(),
-                                  cabeloFeminino ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.CABELO_FEMININO, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const InfoCategoriaDesabilitada(),
-                                  depilacao ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.DEPILACAO, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const InfoCategoriaDesabilitada(),
-                                  manicure ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.MANICURE, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const InfoCategoriaDesabilitada(),
-                                  maquiagem ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.MAQUIAGEM, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const  InfoCategoriaDesabilitada(),
-                                  outros ?
-                                  ContainerServicoAdicionado(categoriaServico: CategoriaServicoEnum.OUTROS, onRegister: (novoServico) {
-                                    cadastrarNovoServico(novoServico);
-                                  }) : const InfoCategoriaDesabilitada()
-                                ]
-                            ),
-                          );
-                        }
-                    ),
-                  ),
-                ],
-              )
-          )
-      ),
+      AbasCadastroServicos(
+          listaCategoriasSelecionadas: listaCategoriasSelecionadas,
+          cabeloMasculino: cabeloMasculino, cabeloFeminino: cabeloFeminino,
+          depilacao: depilacao,
+          manicure: manicure,
+          maquiagem: maquiagem,
+          outros: outros,
+          cadastrarNovoServico: cadastrarNovoServico),
       //Quinta página - Serviços adicionados
-      SizedBox(
-        child: Column(
-          children: [
-            listaServicosTotais.isNotEmpty
-                ? Expanded( // Adicionado Expanded aqui para o ListView.builder
-              child: ListView.builder(
-                controller: ScrollController(),
-                itemCount: listaServicosTotais.length,
-                itemBuilder: (context, index) {
-                  ServicoVO servico = listaServicosTotais[index];
-                  return CardServicoAdicionado(
-                    servicoVO: servico,
-                    removerServico: (servico) {
-                      showDialogConfirmacao(servico);
-                    },
-                  );
-                },
-              ),
-            )
-                : const SizedBox(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Center(
-                        child: Column(
-                          children: [
-                            Texto(
-                            texto: "Parece que você ainda não cadastrou nenhum serviço",
-                            tamanhoTexto: 16,
-                            peso: FontWeight.w600,
-                            cor: AppColors.preto),
-                            Texto(
-                                texto: "Clique no botão voltar e adicione algum serviço",
-                                tamanhoTexto: 14,
-                                peso: FontWeight.normal,
-                                cor: AppColors.preto)
-                          ],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-          ],
-        ),
-      ),
+      AbaServicosCadastrados(listaServicosCadastrados: listaServicosTotais, removerServico: removerServico),
       //Sexta página - Horário funcionamento
-      AbaCadastroHorarios(setHorarios: (horarioCompleto) {
+      AbaCadastroHorarios(
+          //Essa função é chamada sempre que um campos dos horários é atualizado
+          setHorario: (horarioEditado) {
         setState(() {
-          horarioFuncionamentoCompletoVO = horarioCompleto;
+          switch(horarioEditado.getDiaSemanaEnum()!) {
+            case DiasSemanaEnum.SEGUNDA_FEIRA:
+              horarioFuncionamentoCompletoVO.setHorarioSegunda(horarioEditado);
+              break;
+            case DiasSemanaEnum.TERCA_FEIRA:
+              horarioFuncionamentoCompletoVO.setHorarioTerca(horarioEditado);
+              break;
+            case DiasSemanaEnum.QUARTA_FEIRA:
+              horarioFuncionamentoCompletoVO.setHorarioQuarta(horarioEditado);
+              break;
+            case DiasSemanaEnum.QUINTA_FEIRA:
+              horarioFuncionamentoCompletoVO.setHorarioQuinta(horarioEditado);
+              break;
+            case DiasSemanaEnum.SEXTA_FEIRA:
+              horarioFuncionamentoCompletoVO.setHorarioSexta(horarioEditado);
+              break;
+            case DiasSemanaEnum.SABADO:
+              horarioFuncionamentoCompletoVO.setHorarioSabado(horarioEditado);
+              break;
+            case DiasSemanaEnum.DOMINGO:
+              horarioFuncionamentoCompletoVO.setHorarioDomingo(horarioEditado);
+              break;
+          }
         });
       })
     ];
@@ -525,32 +456,11 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
             BotaoPrimario(onPressed: () {
               proximaPagina();
               setTextoPaginaAtual(true);
-            }, textoBotao: "Avançar")
+            }, textoBotao: textoPagina == 6 ? "Finalizar" : "Avançar")
           ],
         ),
       ),
     );
   }
 
-}
-
-class InfoCategoriaDesabilitada extends StatelessWidget {
-  const InfoCategoriaDesabilitada({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      child: Center(
-        child: Padding(padding: const EdgeInsets.all(24),
-        child: Column(
-          children: [
-            Text("Essa categoria não foi selecionada\npara que serviços possam ser adicionados a ela",
-              style: GoogleFonts.poppins(
-                fontSize: 14,
-                fontWeight: FontWeight.normal), textAlign: TextAlign.center)
-          ],
-        ),),
-      ),
-    );
-  }
 }

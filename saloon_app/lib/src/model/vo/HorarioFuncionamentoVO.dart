@@ -1,3 +1,5 @@
+import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
+
 class HorarioFuncionamentoVO {
   int? idHorarioFuncionamento;
   String? horarioAbertura;
@@ -7,6 +9,7 @@ class HorarioFuncionamentoVO {
   String? diaSemanaFuncionamento;
   DateTime? dataCadastro;
   DateTime? dataAtualizacao;
+  DiasSemanaEnum? diaSemanaEnum;
 
   //Para o cadastro inicial dos horários do estabelecimento
   HorarioFuncionamentoVO.simples() {
@@ -14,6 +17,12 @@ class HorarioFuncionamentoVO {
     horarioFechamento;
     diaSemanaFuncionamento;
     dataCadastro;
+  }
+
+  HorarioFuncionamentoVO.cadastro() {
+    horarioAbertura;
+    horarioFechamento;
+    diaSemanaEnum;
   }
 
   HorarioFuncionamentoVO();
@@ -26,6 +35,7 @@ class HorarioFuncionamentoVO {
   String? getDiaSemanaFuncionamento() => diaSemanaFuncionamento;
   DateTime? getDataCadastro() => dataCadastro;
   DateTime? getDataAtualizacao() => dataAtualizacao;
+  DiasSemanaEnum? getDiaSemanaEnum() => diaSemanaEnum;
 
   void setIdHorarioFuncionamento(int idHorarioFuncionamento) {
     this.idHorarioFuncionamento = idHorarioFuncionamento;
@@ -57,6 +67,10 @@ class HorarioFuncionamentoVO {
 
   void setDataAtualizacao(DateTime dataAtualizacao) {
     this.dataAtualizacao = dataAtualizacao;
+  }
+
+  void setDiaSemanaEnum(DiasSemanaEnum diaSemanaEnum) {
+    this.diaSemanaEnum = diaSemanaEnum;
   }
 
 }
