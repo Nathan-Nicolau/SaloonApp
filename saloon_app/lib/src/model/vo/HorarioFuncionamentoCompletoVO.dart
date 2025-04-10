@@ -25,6 +25,30 @@ class HorarioFuncionamentoCompletoVO {
   void setHorarioSabado(HorarioFuncionamentoVO horarioSabado) { this.horarioSabado = horarioSabado; }
   void setHorarioDomingo(HorarioFuncionamentoVO horarioDomingo) { this.horarioDomingo = horarioDomingo; }
 
-
+  List<HorarioFuncionamentoVO?> getHorariosEmLista() {
+    List<HorarioFuncionamentoVO?> lista = [];
+    if(horarioSegunda?.diaSemanaEnum != null) {
+      lista.add(horarioSegunda);
+    }
+    if(horarioTerca?.diaSemanaEnum != null) {
+      lista.add(horarioTerca);
+    }
+    if(horarioQuarta?.diaSemanaEnum != null) {
+      lista.add(horarioQuarta);
+    }
+    if(horarioQuinta?.diaSemanaEnum != null) {
+      lista.add(horarioQuinta);
+    }
+    if(horarioSexta?.diaSemanaEnum != null) {
+      lista.add(horarioSexta);
+    }
+    if(horarioSabado?.diaSemanaEnum != null) {
+      lista.add(horarioSabado);
+    }
+    if(horarioDomingo?.diaSemanaEnum != null) {
+      lista.add(horarioDomingo);
+    }
+    return lista;
+  }
 
 }

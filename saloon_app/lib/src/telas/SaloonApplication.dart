@@ -34,7 +34,7 @@ class SaloonApplication extends StatelessWidget {
         "/paywall": (context) => const Paywallscreen(),
         "/agendamento-rapido": (context) => const AgendamentoScreen(),
         "/cadastroProprietario": (context) => const CadastroSalaoScreen(),
-        "/confirmacaoCadastroProprietario": (context) => ConfirmacaoCadastroScreen(salaoVO: ModalRoute.of(context)!.settings.arguments as SalaoVO)
+        ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen()
       },
     );
   }

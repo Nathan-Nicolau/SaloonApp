@@ -16,6 +16,7 @@ import 'package:saloon_app/src/widgets/dialog/DialogMensagem.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroHorarios.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroServicos.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaServicosCadastrados.dart';
+import '../../../telas/ConfirmacaoCadastroSalaoScreen.dart';
 import '../../../utils/AppColors.dart';
 import '../../CampoTexto.dart';
 
@@ -95,11 +96,13 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
 
   void proximaPagina() {
     setState(() {
-      if(pagina < 5) {
-        pagina++;
-      }
+
       if(pagina == 5) {
         construirObjetoSalaoCadastro();
+      }
+
+      if(pagina < 5) {
+        pagina++;
       }
     });
   }
@@ -227,7 +230,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   }
 
   void prosseguirTelaConfirmacaoCadastro() {
-    Navigator.pushNamed(context, "/confirmacaoCadastroProprietario", arguments: salao);
+    Navigator.pushNamed(context, ConfirmacaoCadastroScreen.routeName, arguments: salao);
   }
 
   @override

@@ -33,6 +33,7 @@ dependencies:
   flutter_animate: ^4.5.2
   dropdown_button2: ^2.3.9
   info_popup: ^4.3.2
+  outline_material_icons: ^1.0.0
   flutter:
     sdk: flutter
 

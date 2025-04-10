@@ -4,11 +4,16 @@ import 'package:saloon_app/src/widgets/telas/cadastro/ConfirmacaoCadastroSalao.d
 
 class ConfirmacaoCadastroScreen extends StatelessWidget {
 
-  final SalaoVO salaoVO;
-  const ConfirmacaoCadastroScreen({required this.salaoVO, super.key});
+  static const routeName = "/confirmacaoCadastroProprietario";
+
+  const ConfirmacaoCadastroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return ConfirmacaoCadastroSalao(salaoVO: salaoVO);
+
+    final salaoVo = ModalRoute.of(context)!.settings.arguments as SalaoVO;
+
+    return ConfirmacaoCadastroSalao(salaoVO: salaoVo);
+
   }
 }
