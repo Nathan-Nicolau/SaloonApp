@@ -8,6 +8,7 @@ class SalaoVO {
   String? enderecoSalao;
   String? cepEndereco;
   String? numeroEndereco;
+  String? cidadeEndereco;
   String? descricaoFuncionamento;
   String? codigoCompartilhamento;
   String? dataCadastroSalao;
@@ -30,6 +31,7 @@ class SalaoVO {
   String? getEnderecoSalao() => enderecoSalao;
   String? getCepSalao() => cepEndereco;
   String? getNumeroEndereco() => numeroEndereco;
+  String? getCidadeEndereco() => cidadeEndereco;
   String? getCodigoCompartilhamentp() => codigoCompartilhamento;
   String? getDescricaoFuncionamento() => descricaoFuncionamento;
   String? getDataCadastro() => dataCadastroSalao;
@@ -59,6 +61,10 @@ class SalaoVO {
 
   void setNumeroEndereco(String numeroEndereco) {
     this.numeroEndereco = numeroEndereco;
+  }
+
+  void setCidadeEndereco(String cidadeEndereco) {
+    this.cidadeEndereco = cidadeEndereco;
   }
 
   void steCodigoCompartilhamento(String codigoCompartilhamento) {

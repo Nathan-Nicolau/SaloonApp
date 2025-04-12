@@ -18,7 +18,11 @@ class PaywallWidget extends StatefulWidget {
 class _PaywallWidgetState extends State<PaywallWidget> {
 
   void prosseguirTelaCadastroProprietario() {
-    Navigator.pushNamed(context, "/cadastroProprietario");
+    Navigator.pushNamed(context, "/cadastro-proprietario");
+  }
+
+  void prosseguirTelaEscolhaPlano() {
+    Navigator.pushNamed(context, "/escolha-plano");
   }
 
   @override
@@ -77,7 +81,7 @@ class _PaywallWidgetState extends State<PaywallWidget> {
                                   prosseguirTelaCadastroProprietario();
                                 }, textoBotao: "Testar grátis por 15 dias",larguraExtendida: true),
                                 BotaoSecundario(onPressed: () {
-
+                                  prosseguirTelaEscolhaPlano();
                                 },textoBotao: "Assine já", larguraExtendida: true)
                               ],
                             ),

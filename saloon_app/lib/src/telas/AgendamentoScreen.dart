@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:saloon_app/src/widgets/telas/AgendamentoWidget.dart';
+import 'package:saloon_app/src/widgets/telas/agendamento/AgendamentoWidget.dart';
 
 class AgendamentoScreen extends StatelessWidget {
 

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:saloon_app/src/telas/AgendamentoScreen.dart';
 import 'package:saloon_app/src/telas/CadastroSalaoScreen.dart';
 import 'package:saloon_app/src/telas/ConfirmacaoCadastroSalaoScreen.dart';
+import 'package:saloon_app/src/telas/EscolhaPlanoSalaoScreen.dart';
 import 'package:saloon_app/src/telas/LoginScreen.dart';
 import 'package:saloon_app/src/telas/OnboardingScreen.dart';
 import 'package:saloon_app/src/telas/PaywallScreen.dart';
@@ -10,7 +11,7 @@ import 'package:saloon_app/src/telas/SplashScreen.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/telas/NovaContaScreen.dart';
 import 'package:saloon_app/src/widgets/SplashWidget.dart';
-import 'package:saloon_app/src/widgets/telas/AgendamentoWidget.dart';
+import 'package:saloon_app/src/widgets/telas/agendamento/AgendamentoWidget.dart';
 
 import '../model/vo/SalaoVO.dart';
 
@@ -33,8 +34,9 @@ class SaloonApplication extends StatelessWidget {
         "/novaConta": (context) => const NovaContaScreen(),
         "/paywall": (context) => const Paywallscreen(),
         "/agendamento-rapido": (context) => const AgendamentoScreen(),
-        "/cadastroProprietario": (context) => const CadastroSalaoScreen(),
-        ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen()
+        "/cadastro-proprietario": (context) => const CadastroSalaoScreen(),
+        ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen(),
+        "/escolha-plano": (context) => const EscolhaPlanoSalaoScreen()
       },
     );
   }
