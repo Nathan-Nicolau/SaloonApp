@@ -7,9 +7,10 @@ class BotaoPrimario extends StatefulWidget {
   final VoidCallback onPressed;
   final String textoBotao;
   final bool larguraExtendida;
+  final bool habilitado;
   final Icon? icone;
 
-  const BotaoPrimario({required this.onPressed,required this.textoBotao, this.larguraExtendida = false, this.icone = null, super.key});
+  const BotaoPrimario({required this.onPressed,required this.textoBotao, this.larguraExtendida = false,this.habilitado = true, this.icone = null, super.key});
 
   @override
   State<BotaoPrimario> createState() => _BotaoPrimarioState();
@@ -22,17 +23,18 @@ class _BotaoPrimarioState extends State<BotaoPrimario> {
     return SizedBox(
       width: widget.larguraExtendida ? double.infinity : null,
       child: ElevatedButton(
-        onPressed: widget.onPressed,
+        onPressed: widget.habilitado ? widget.onPressed : null,
         style: ButtonStyle(
-            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12))),
-            backgroundColor: const WidgetStatePropertyAll(AppColors.azulPrincipal),
-            elevation: const WidgetStatePropertyAll(2)
+            shape: WidgetStatePropertyAll(RoundedRectangleBorder(borderRadius: BorderRadius.circular(12),
+                side: const BorderSide(color: AppColors.azulPrincipal, width: 2) )),
+            backgroundColor: WidgetStatePropertyAll(widget.habilitado ? AppColors.azulPrincipal : AppColors.branco),
+            elevation: WidgetStatePropertyAll(widget.habilitado ? 2 : 0)
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Text(widget.textoBotao,
-                style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: AppColors.branco)),
+                style: GoogleFonts.poppins(fontSize: 14, fontWeight: FontWeight.w600, color: widget.habilitado ? AppColors.branco : AppColors.azulPrincipal)),
             widget.icone != null ? widget.icone! : Row()
           ],
         ),

@@ -22,24 +22,12 @@ class _AbaEscolhaPlanosState extends State<AbaEscolhaPlanos> {
   late PlanoSalaoVO planoSalaoVO;
   late PlanoUsoSaloonEnum? planoSelecionado;
 
-  void montarPlanos() {
-    planos.clear();
-    for(var planoEnum in PlanoUsoSaloonEnum.values) {
-      planos.add(
-        CardEscolhaPlano(
-            plano: planoEnum,
-            selecionado: planoEnum.codigo == planoSelecionado?.codigo,
-            selecionarPlano: (codigoPlano) {setPlanoSelecionado(codigoPlano);})
-      );
-    }
-  }
-
   void setPlanoSelecionado(int codigoPlano) {
     setState(() {
       for(var plano in PlanoUsoSaloonEnum.values) {
         if(plano.codigo == codigoPlano) {
           planoSelecionado = plano;
-          widget.selecionarPlano(planoSelecionado!.codigo);
+          widget.selecionarPlano(plano.codigo);
         }
       }
     });
@@ -50,8 +38,7 @@ class _AbaEscolhaPlanosState extends State<AbaEscolhaPlanos> {
     super.initState();
     planos = [];
     planoSalaoVO = PlanoSalaoVO();
-    planoSelecionado = widget.planoSelecionado;
-    montarPlanos();
+    planoSelecionado = null;
   }
 
   @override

@@ -11,7 +11,6 @@ class BotaoSecundario extends StatefulWidget {
 
    const BotaoSecundario({required this.onPressed, required this.textoBotao, this.larguraExtendida = false,  this.comBorda = false,super.key});
 
-
   @override
   State<BotaoSecundario> createState() => _BotaoSecundarioState();
 }
