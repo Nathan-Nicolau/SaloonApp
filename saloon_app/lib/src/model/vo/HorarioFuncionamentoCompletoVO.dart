@@ -51,4 +51,14 @@ class HorarioFuncionamentoCompletoVO {
     return lista;
   }
 
+  bool isHorariosAtribuidosCorretamente() {
+    return horarioSegunda != null ||
+        horarioTerca != null ||
+        horarioQuarta != null ||
+        horarioQuinta != null ||
+        horarioSexta != null ||
+        horarioSabado != null ||
+        horarioDomingo != null;
+  }
+
 }

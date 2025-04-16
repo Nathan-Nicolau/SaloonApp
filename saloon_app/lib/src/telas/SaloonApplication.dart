@@ -12,6 +12,7 @@ import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/telas/NovaContaScreen.dart';
 import 'package:saloon_app/src/widgets/SplashWidget.dart';
 import 'package:saloon_app/src/widgets/telas/agendamento/AgendamentoWidget.dart';
+import 'package:toastification/toastification.dart';
 
 import '../model/vo/SalaoVO.dart';
 
@@ -20,24 +21,26 @@ class SaloonApplication extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: AppColors.azulPrincipal),
-        brightness: Brightness.light,
+    return ToastificationWrapper(
+      child: MaterialApp(
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(seedColor: AppColors.azulPrincipal),
+          brightness: Brightness.light,
+        ),
+        debugShowCheckedModeBanner: false,
+        initialRoute: "/",
+        routes: {
+          "/" : (context) => const SplashScreen(),
+          "/apresentacao": (context) => const OnboardingScreen(),
+          "/login": (context) => const LoginScreen(),
+          "/novaConta": (context) => const NovaContaScreen(),
+          "/paywall": (context) => const Paywallscreen(),
+          "/agendamento-rapido": (context) => const AgendamentoScreen(),
+          "/cadastro-proprietario": (context) => const CadastroSalaoScreen(),
+          ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen(),
+          "/escolha-plano": (context) => const EscolhaPlanoSalaoScreen()
+        },
       ),
-      debugShowCheckedModeBanner: false,
-      initialRoute: "/",
-      routes: {
-        "/" : (context) => const SplashScreen(),
-        "/apresentacao": (context) => const OnboardingScreen(),
-        "/login": (context) => const LoginScreen(),
-        "/novaConta": (context) => const NovaContaScreen(),
-        "/paywall": (context) => const Paywallscreen(),
-        "/agendamento-rapido": (context) => const AgendamentoScreen(),
-        "/cadastro-proprietario": (context) => const CadastroSalaoScreen(),
-        ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen(),
-        "/escolha-plano": (context) => const EscolhaPlanoSalaoScreen()
-      },
     );
   }
 }

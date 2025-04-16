@@ -14,6 +14,7 @@ class AppColors {
   static const cinza = Color(-6445905);
   static const cinzaEscuro = Color(-13355980);
   static const vermelhoDark = Color(-10158080);
+  static const vermelho = Color(-6225920);
   static const bronze = Color(-4044288);
   static const prata = Color(-4342339);
   static const ouro = Color(-2518016);

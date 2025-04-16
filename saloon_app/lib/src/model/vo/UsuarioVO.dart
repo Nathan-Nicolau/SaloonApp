@@ -6,48 +6,29 @@ class UsuarioVO {
     int? idUsuario;
     String? loginUsuario;
     String? senhaUsuario;
+    String? confirmacaoSenha;
     String? nomeUsuario;
     String? emailUsuario;
     String? telefoneUsuario;
     DateTime? dataCadUsuario;
     DateTime? dataAtuUsuario;
 
-  UsuarioVO(
-      this.idUsuario,
-      this.loginUsuario,
-      this.senhaUsuario,
-      this.nomeUsuario,
-      this.emailUsuario,
-      this.telefoneUsuario,
-      this.dataCadUsuario,
-      this.dataAtuUsuario);
-
-  UsuarioVO.login(
-      this.loginUsuario,
-      this.senhaUsuario);
-
-  UsuarioVO.vazio() :
-        idUsuario = 0,
-        loginUsuario = "",
-        senhaUsuario = "",
-        nomeUsuario = "",
-        emailUsuario = "",
-        telefoneUsuario = "",
-        dataCadUsuario = null,
-        dataAtuUsuario = null;
 
   Usuario toUsuarioData() {
     return Usuario(idUsuario ?? 0,loginUsuario?? "",senhaUsuario ?? "",nomeUsuario ?? "",emailUsuario ?? "",telefoneUsuario ?? "",dataAtuUsuario ?? DateTime.now(),dataAtuUsuario ?? DateTime.now());
   }
 
-  int getIdUsuario() => idUsuario ?? 0;
-  String getLoginUsuario() => loginUsuario ?? "";
-  String getSenhausuario() => senhaUsuario ?? "";
-  String getNomeUsuario() => nomeUsuario ?? "";
-  String getEmailUsuario() => emailUsuario ?? "";
-  String getTelefoneUsuario() => telefoneUsuario ?? "";
-  DateTime getDataCadastroUsuario() => dataCadUsuario ?? DateTime.now();
-  DateTime getDataAtualizacaoUsuario() => dataAtuUsuario ?? DateTime.now();
+  UsuarioVO();
+
+  int? getIdUsuario() => idUsuario;
+  String? getLoginUsuario() => loginUsuario;
+  String? getSenhausuario() => senhaUsuario;
+  String? getConfirmacaoSenha() => confirmacaoSenha;
+  String? getNomeUsuario() => nomeUsuario;
+  String? getEmailUsuario() => emailUsuario;
+  String? getTelefoneUsuario() => telefoneUsuario;
+  DateTime? getDataCadastroUsuario() => dataCadUsuario;
+  DateTime? getDataAtualizacaoUsuario() => dataAtuUsuario;
 
   void setIdUsuario(int idUsuario) {
     this.idUsuario = idUsuario;
@@ -59,6 +40,10 @@ class UsuarioVO {
 
   void setSenhaUsuario(String senhaUsuario) {
     this.senhaUsuario  = senhaUsuario;
+  }
+
+  void setConfirmacaoSenha(String confirmacaoSenha) {
+    this.confirmacaoSenha = confirmacaoSenha;
   }
 
   void setNomeUsuario(String nomeUsuario) {

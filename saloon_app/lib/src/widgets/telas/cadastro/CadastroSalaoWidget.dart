@@ -16,9 +16,11 @@ import 'package:saloon_app/src/widgets/dialog/DialogMensagem.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroHorarios.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaCadastroServicos.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/abas_cadastro_salao/AbaServicosCadastrados.dart';
+import 'package:toastification/toastification.dart';
 import '../../../telas/ConfirmacaoCadastroSalaoScreen.dart';
 import '../../../utils/AppColors.dart';
 import '../../CampoTexto.dart';
+import 'abas_cadastro_salao/AbaCadastroUsuario.dart';
 
 class CadastroSalaoWidget extends StatefulWidget {
   const CadastroSalaoWidget({super.key});
@@ -34,8 +36,12 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   int pagina = 0;
   int textoPagina = 1;
   int abaCategoria = 0;
+
   late UsuarioVO usuario;
+  bool erroConfirmacaoSenha = false;
+
   late SalaoVO salao;
+
   late List<CategoriaServicoVO> listaCategoriasBase;
   late List<CategoriaServicoVO> listaCategoriasSelecionadas;
   late final TabController tabController;
@@ -66,7 +72,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   @override
   void initState() {
     super.initState();
-    usuario = UsuarioVO.vazio();
+    usuario = UsuarioVO();
     salao = SalaoVO();
     servicoAdicionado = ServicoVO();
     listaCategoriasBase = CategoriaServicoEnum.getCategoriasBase();
@@ -79,30 +85,102 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     horarioFuncionamentoCompletoVO = HorarioFuncionamentoCompletoVO();
   }
 
+  void setNomeUsuario(String nome) {
+    setState(() {
+      usuario.setNomeUsuario(nome);
+    });
+  }
+
+  void setEmailUsuario(String emailUsuario) {
+    setState(() {
+      usuario.setEmailUsuario(emailUsuario);
+    });
+  }
+
+  void setTelefoneUsuario(String telefoneUsuario) {
+    setState(() {
+      usuario.setTelefoneUsuario(telefoneUsuario);
+    });
+  }
+
+  void setSenhaUsuario(String senhaUsuario) {
+    setState(() {
+      usuario.setSenhaUsuario(senhaUsuario);
+    });
+  }
+
+  void setConfirmacaoSenha(String confirmacaoSenha) {
+    setState(() {
+      usuario.setConfirmacaoSenha(confirmacaoSenha);
+    });
+  }
+
+  void setErroConfirmacaoSenha() {
+    setState(() {
+      bool senhaInformada = usuario.getSenhausuario() != null;
+      bool confirmacaoSenhaInformada = usuario.getConfirmacaoSenha() != null;
+      erroConfirmacaoSenha = (
+          usuario.getSenhausuario() != usuario.getConfirmacaoSenha() &&
+      senhaInformada && confirmacaoSenhaInformada);
+    });
+  }
+
   void setTextoPaginaAtual(bool proximo) {
     setState(() {
       if(proximo) {
-        if(textoPagina < 6) {
-          textoPagina++;
-        }
+        textoPagina == pagina + 1;
       } else {
-        if(textoPagina > 1) {
-          textoPagina--;
-        }
+        textoPagina = textoPagina - pagina;
       }
     });
     validarTituloAppbar();
   }
 
+  bool validarPermissaoConfirmacao() {
+
+    bool permite = true;
+
+    bool nomeInformado = usuario.getNomeUsuario() != null;
+    bool emailUsuarioInformado = usuario.getEmailUsuario() != null;
+    bool telefoneInformado = usuario.getTelefoneUsuario() != null;
+    bool senhaInformada = usuario.getSenhausuario() != null;
+
+    bool nomeEstabelecimentoInformado = salao.getNomeSalao() != null;
+    bool cepEstabelecimento = salao.getCepSalao() != null;
+    bool enderecoEstabelecimento = salao.getEnderecoSalao() != null;
+    bool numeroEnderecoInformado = salao.getNumeroEndereco() != null;
+
+    bool umaCategoriaSelecionada = cabeloMasculino || cabeloFeminino || depilacao || maquiagem || manicure || outros;
+    bool umServicoInformado = listaServicosTotais.isNotEmpty;
+    bool horariosInformados = horarioFuncionamentoCompletoVO.isHorariosAtribuidosCorretamente();
+
+    permite = umaCategoriaSelecionada && umServicoInformado && horariosInformados;
+
+    if(!nomeInformado || !emailUsuarioInformado || !telefoneInformado || !senhaInformada) {
+      UtilsUI.showToast(context,"Informações do usuário incompletas");
+    } else if(!nomeEstabelecimentoInformado || !cepEstabelecimento || !!enderecoEstabelecimento || numeroEnderecoInformado) {
+      UtilsUI.showToast(context,"Informações do estabelecimento incompletas");
+    } else if(!umaCategoriaSelecionada) {
+      UtilsUI.showToast(context,"Selecione ao menos uma categoria");
+    } else if (!umServicoInformado) {
+      UtilsUI.showToast(context,"É necessário que você informe ao menos um serviço");
+    } else if(!horariosInformados) {
+      UtilsUI.showToast(context,"É necessário informar ao menos um horário");
+    }
+
+    return permite;
+  }
+
   void proximaPagina() {
     setState(() {
 
-      if(pagina == 5) {
-        construirObjetoSalaoCadastro();
+      if(pagina == 5 && validarPermissaoConfirmacao()) {
+        prosseguirConfirmacaoCadastro();
       }
 
       if(pagina < 5) {
         pagina++;
+        validarTituloAppbar();
       }
     });
   }
@@ -111,13 +189,15 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     setState(() {
       if(pagina > 0) {
         pagina--;
+        validarTituloAppbar();
       }
     });
   }
 
   void validarTituloAppbar() {
     setState(() {
-      switch(textoPagina) {
+      var paginaSelecionada = pagina + 1;
+      switch(paginaSelecionada) {
         case 1:
           tituloAppBar = "Acesso";
           break;
@@ -218,10 +298,10 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
   }
 
   //Essa função deve ser chamada quando o cadatro estiver pronto para ser finalizado
-  void construirObjetoSalaoCadastro() {
+  void prosseguirConfirmacaoCadastro() {
     setState(() {
       var proprietarioSalao = ProprietarioVO();
-      proprietarioSalao.setNomeProprietario(usuario.getNomeUsuario());
+      proprietarioSalao.setNomeProprietario(usuario.getNomeUsuario() ?? "");
       proprietarioSalao.setDataCadastroProprietario(AppUtils.getDataAtualFormatada());
       salao.setProprietarioVo(proprietarioSalao);
       salao.setHorarioFuncionamento(horarioFuncionamentoCompletoVO);
@@ -239,34 +319,13 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
     //Lista de telas construídas aqui
     List<Widget> telas = [
       //Primeira página - Acesso
-      Container(
-        padding: const EdgeInsets.fromLTRB(24, 8, 24, 24),
-        child: Column(
-            spacing: 8,
-            children: [
-              //Nome de cadastro do usuário proprietário
-              CampoTexto(valorTexto: usuario.getNomeUsuario(), label: "Nome do(a) responsável", placeholder: "Seu nome de usuário", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                setState(() {
-                  usuario.setNomeUsuario(valorTexto);
-                });
-              }),
-              CampoTexto(valorTexto: usuario.getEmailUsuario(), label: "E-mail", placeholder: "Digite seu e-mail de acesso", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                setState(() {
-                  usuario.setEmailUsuario(valorTexto);
-                });
-              }),
-              CampoTexto(valorTexto: usuario.getTelefoneUsuario(), label: "Telefone", placeholder: "Digite seu número de telefone", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                setState(() {
-                  usuario.setTelefoneUsuario(valorTexto);
-                });
-              }),
-              CampoTexto(valorTexto: usuario.getSenhausuario(), label: "Senha", placeholder: "Mínimo de 8 caracteres", textoAjudaInferior: "", corTexto: AppColors.preto, erro: false, aviso: false, iconeInicial: null, iconeFinal: null, onTextChange: (valorTexto) {
-                setState(() {
-                  usuario.setSenhaUsuario(valorTexto);
-                });
-              }),
-            ]
-        )
+      AbaCadastroUsuario(
+        usuario: usuario,
+        setNomeUsuario: setNomeUsuario,
+        setEmailUsuario: setEmailUsuario,
+        setTelefoneUsuario: setTelefoneUsuario,
+        setSenhaUsuario: setSenhaUsuario,
+        setConfirmacaoSenha: setConfirmacaoSenha,
       ),
       //Segunda página - Informações do local
       Container(
@@ -437,7 +496,7 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
         actions: [
           Padding(
             padding: const EdgeInsets.fromLTRB(0, 0, 12, 0),
-            child: Texto(texto: "$textoPagina/6", tamanhoTexto: 16, peso: FontWeight.w600, cor: AppColors.preto)
+            child: Texto(texto: "${pagina + 1}/6", tamanhoTexto: 16, peso: FontWeight.w600, cor: AppColors.preto)
           )
 
         ],
@@ -454,12 +513,10 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
           children: [
             BotaoPrimario(onPressed: () {
               paginaAnterior();
-              setTextoPaginaAtual(false);
             }, textoBotao: "Voltar"),
             BotaoPrimario(onPressed: () {
               proximaPagina();
-              setTextoPaginaAtual(true);
-            }, textoBotao: textoPagina == 6 ? "Finalizar" : "Avançar")
+            }, textoBotao: pagina == 5 ? "Finalizar" : "Avançar")
           ],
         ),
       ),

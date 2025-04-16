@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:saloon_app/src/utils/AppColors.dart';
 
 class CampoTexto extends StatefulWidget {
 
@@ -36,20 +37,27 @@ class _CampoTextoState extends State<CampoTexto> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(widget.label, style: GoogleFonts.poppins(
-          fontSize: 16,
+          fontSize: 14,
           fontWeight: FontWeight.w600,
-          color: widget.corTexto
+          color: widget.erro ? AppColors.vermelho : widget.corTexto
         )),
         TextField(
+          keyboardType: TextInputType.visiblePassword,
+          cursorErrorColor: AppColors.vermelho,
           textAlign: TextAlign.start,
+          textAlignVertical: TextAlignVertical.center,
           onChanged: widget.onTextChange,
           style: GoogleFonts.poppins(
             fontSize: 15,
-            fontWeight: FontWeight.w500
+            fontWeight: widget.erro ? FontWeight.w700 : FontWeight.w500,
+            color: widget.erro ? AppColors.vermelho : widget.corTexto
           ),
           controller: controller,
           decoration: InputDecoration(
-              icon: widget.iconeInicial,
+            fillColor: widget.erro ? AppColors.vermelho : widget.corTexto,
+              focusColor: widget.erro ? AppColors.vermelho : widget.corTexto,
+              prefixIcon: widget.iconeInicial,
+              prefixIconColor: widget.erro ? AppColors.vermelho : widget.corTexto,
               hintText: widget.placeholder,
               hintTextDirection: TextDirection.ltr,
               hintStyle: GoogleFonts.poppins(

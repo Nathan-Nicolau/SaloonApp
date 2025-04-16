@@ -23,7 +23,7 @@ class _LoginwidgetState extends State<Loginwidget> {
     String loginUsuarioInformado = "";
     String senhaInformada = "";
 
-    UsuarioVO usuarioVO = UsuarioVO.vazio();
+    UsuarioVO usuarioVO = UsuarioVO();
 
     void setExibirCarregamento() {
       setState(() {
@@ -44,7 +44,8 @@ class _LoginwidgetState extends State<Loginwidget> {
     }
 
     void realizarLogin() async {
-      usuarioVO = UsuarioVO.login(loginUsuarioInformado, senhaInformada);
+      //loginUsuarioInformado, senhaInformada
+      usuarioVO = UsuarioVO();
       //realizar o processo de login no Viewmodel aqui
     }
 

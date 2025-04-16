@@ -23,10 +23,6 @@ class Usuario {
       this.dataCadUsuario,
       this.dataAtuUsuario);
 
-  UsuarioVO getUsuarioVo() {
-    return UsuarioVO(idUsuario, loginUsuario, senhausuario, nomeUsuario, emailUsuario, telefoneUsuario, dataCadUsuario, dataAtuUsuario);
-  }
-
   String get getSenhaUsuario {
     return senhausuario;
   }

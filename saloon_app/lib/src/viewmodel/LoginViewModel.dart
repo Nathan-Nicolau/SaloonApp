@@ -8,7 +8,7 @@ class LoginViewModel {
   }
 
   bool recuperarUsuario(UsuarioVO usuarioInformado)  {
-    return usuarioInformado != UsuarioVO.vazio();
+    return usuarioInformado != UsuarioVO();
   }
 
 }
