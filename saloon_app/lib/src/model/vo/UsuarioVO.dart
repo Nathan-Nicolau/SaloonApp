@@ -10,9 +10,9 @@ class UsuarioVO {
     String? nomeUsuario;
     String? emailUsuario;
     String? telefoneUsuario;
+    int? codigoTipoUsuario;
     DateTime? dataCadUsuario;
     DateTime? dataAtuUsuario;
-
 
   Usuario toUsuarioData() {
     return Usuario(idUsuario ?? 0,loginUsuario?? "",senhaUsuario ?? "",nomeUsuario ?? "",emailUsuario ?? "",telefoneUsuario ?? "",dataAtuUsuario ?? DateTime.now(),dataAtuUsuario ?? DateTime.now());
@@ -27,6 +27,7 @@ class UsuarioVO {
   String? getNomeUsuario() => nomeUsuario;
   String? getEmailUsuario() => emailUsuario;
   String? getTelefoneUsuario() => telefoneUsuario;
+  int? getCodigoTipoUsuario() => codigoTipoUsuario;
   DateTime? getDataCadastroUsuario() => dataCadUsuario;
   DateTime? getDataAtualizacaoUsuario() => dataAtuUsuario;
 
@@ -56,6 +57,10 @@ class UsuarioVO {
 
   void setTelefoneUsuario(String telefoneUsuario) {
     this.telefoneUsuario = telefoneUsuario;
+  }
+
+  void setCodigoTipoUsuario(int codigoTipoUsuario) {
+    this.codigoTipoUsuario = codigoTipoUsuario;
   }
 
   void setDataCadUsuario(DateTime dataCadUsuario) {

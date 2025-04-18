@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:saloon_app/src/model/vo/ConfirmacaoCadastroVO.dart';
 import 'package:saloon_app/src/model/vo/SalaoVO.dart';
 import 'package:saloon_app/src/utils/AppColors.dart';
+import 'package:saloon_app/src/widgets/BotaoPrimario.dart';
 import 'package:saloon_app/src/widgets/Texto.dart';
+import 'package:saloon_app/src/widgets/telas/cadastro/CadastroSalaoEmAnaliseWidget.dart';
 
 class ConfirmacaoCadastroSalao extends StatefulWidget {
 
-  final SalaoVO salaoVO;
-  const ConfirmacaoCadastroSalao({required this.salaoVO, super.key});
+  final ConfirmacaoCadastroVO confirmacaoCadastroVO;
+  const ConfirmacaoCadastroSalao({required this.confirmacaoCadastroVO, super.key});
 
   @override
   State<ConfirmacaoCadastroSalao> createState() => _AbaConfirmacaoCadastroState();
@@ -16,11 +19,17 @@ class _AbaConfirmacaoCadastroState extends State<ConfirmacaoCadastroSalao> {
 
   late List<Widget> listaWidgetsHorarios;
 
+  void prosseguirTelaCadastroEmAnalise() {
+    setState(() {
+      Navigator.pushNamed(context, CadastroSalaoEmAnaliseWidget.routeName, arguments: widget.confirmacaoCadastroVO.getUsuario());
+    });
+  }
+
   @override
   void initState() {
     super.initState();
     listaWidgetsHorarios = [];
-    widget.salaoVO.horarioFuncionamentoCompletoVO?.getHorariosEmLista().forEach((horario) {
+    widget.confirmacaoCadastroVO.getSalao()?.horarioFuncionamentoCompletoVO?.getHorariosEmLista().forEach((horario) {
       listaWidgetsHorarios.add(
         Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,23 +90,23 @@ class _AbaConfirmacaoCadastroState extends State<ConfirmacaoCadastroSalao> {
                             spacing: 4,
                             children: [
                               const Icon(Icons.storefront_outlined,size: 24,color: AppColors.azulPrincipal),
-                              Texto(texto: "${widget.salaoVO.getNomeSalao()}", tamanhoTexto: 16, peso: FontWeight.w700, cor: AppColors.preto)
+                              Texto(texto: "${widget.confirmacaoCadastroVO.salaoVO?.getNomeSalao()}", tamanhoTexto: 16, peso: FontWeight.w700, cor: AppColors.preto)
                             ]
                         ),
                         Row(
                           spacing: 4,
                           children: [
                             const Texto(texto: "endereço:", tamanhoTexto: 14, peso: FontWeight.normal, cor: AppColors.preto),
-                            Texto(texto: widget.salaoVO.getEnderecoSalao() ?? "Não informado", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal)
+                            Texto(texto: widget.confirmacaoCadastroVO.getSalao()?.getEnderecoSalao() ?? "Não informado", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal)
                           ],
                         ),
                         Row(
                           spacing: 4,
                           children: [
                             const Texto(texto: "número:", tamanhoTexto: 14, peso: FontWeight.normal, cor: AppColors.preto),
-                            Texto(texto: "${widget.salaoVO.getNumeroEndereco()}", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal),
+                            Texto(texto: "${widget.confirmacaoCadastroVO.getSalao()?.getNumeroEndereco()}", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal),
                             const Texto(texto: " CEP:", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.preto),
-                            Texto(texto: "${widget.salaoVO.getCepSalao()}", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal),
+                            Texto(texto: "${widget.confirmacaoCadastroVO.getSalao()?.getCepSalao()}", tamanhoTexto: 14, peso: FontWeight.w500, cor: AppColors.azulPrincipal),
                           ],
                         ),
                         Padding(padding: const EdgeInsets.fromLTRB(0, 12, 0, 4), child:
@@ -114,7 +123,6 @@ class _AbaConfirmacaoCadastroState extends State<ConfirmacaoCadastroSalao> {
                         Column(
                           children:
                           listaWidgetsHorarios
-                          ,
                         )
                       ],
                     ),
@@ -124,6 +132,11 @@ class _AbaConfirmacaoCadastroState extends State<ConfirmacaoCadastroSalao> {
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: Expanded(
+        child: BotaoPrimario(onPressed: () {
+
+        }, textoBotao: "Confirmar")
       ),
     );
   }

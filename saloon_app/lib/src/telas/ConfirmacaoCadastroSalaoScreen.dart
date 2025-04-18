@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:saloon_app/src/model/vo/SalaoVO.dart';
+import 'package:saloon_app/src/model/vo/ConfirmacaoCadastroVO.dart';
 import 'package:saloon_app/src/widgets/telas/cadastro/ConfirmacaoCadastroSalao.dart';
 
 class ConfirmacaoCadastroScreen extends StatelessWidget {
 
-  static const routeName = "/confirmacaoCadastroProprietario";
+  static const routeName = "/confirmacao-cadastro-proprietario";
 
   const ConfirmacaoCadastroScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
 
-    final salaoVo = ModalRoute.of(context)!.settings.arguments as SalaoVO;
+    final confirmacaoCadastro = ModalRoute.of(context)!.settings.arguments as ConfirmacaoCadastroVO;
 
-    return ConfirmacaoCadastroSalao(salaoVO: salaoVo);
+    return ConfirmacaoCadastroSalao(confirmacaoCadastroVO: confirmacaoCadastro);
 
   }
 }

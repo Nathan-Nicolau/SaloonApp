@@ -12,6 +12,7 @@ import 'package:saloon_app/src/utils/AppColors.dart';
 import 'package:saloon_app/src/telas/NovaContaScreen.dart';
 import 'package:saloon_app/src/widgets/SplashWidget.dart';
 import 'package:saloon_app/src/widgets/telas/agendamento/AgendamentoWidget.dart';
+import 'package:saloon_app/src/widgets/telas/cadastro/CadastroSalaoEmAnaliseWidget.dart';
 import 'package:toastification/toastification.dart';
 
 import '../model/vo/SalaoVO.dart';
@@ -38,7 +39,11 @@ class SaloonApplication extends StatelessWidget {
           "/agendamento-rapido": (context) => const AgendamentoScreen(),
           "/cadastro-proprietario": (context) => const CadastroSalaoScreen(),
           ConfirmacaoCadastroScreen.routeName : (context) => const ConfirmacaoCadastroScreen(),
-          "/escolha-plano": (context) => const EscolhaPlanoSalaoScreen()
+          //Será necessário fazer uma tratativa para que o usuário informado seja identificado
+          //Como: proprietário, profissional ou cliente
+          //e ai validar se ainda está em análise para prosseguir para essa tela
+          CadastroSalaoEmAnaliseWidget.routeName: (context) => const CadastroSalaoEmAnaliseWidget(),
+          "/escolha-plano": (context) => const EscolhaPlanoSalaoScreen(),
         },
       ),
     );

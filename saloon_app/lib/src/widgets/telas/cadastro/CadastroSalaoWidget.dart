@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:saloon_app/src/enums/CategoriaServicoEnum.dart';
 import 'package:saloon_app/src/enums/DiasSemanaEnum.dart';
 import 'package:saloon_app/src/model/vo/CategoriaServicoVO.dart';
+import 'package:saloon_app/src/model/vo/ConfirmacaoCadastroVO.dart';
 import 'package:saloon_app/src/model/vo/DiaSemanaVO.dart';
 import 'package:saloon_app/src/model/vo/HorarioFuncionamentoCompletoVO.dart';
 import 'package:saloon_app/src/model/vo/ProprietarioSalaoVO.dart';
@@ -305,12 +306,15 @@ class _CadastroSalaoWidgetState extends State<CadastroSalaoWidget> with TickerPr
       proprietarioSalao.setDataCadastroProprietario(AppUtils.getDataAtualFormatada());
       salao.setProprietarioVo(proprietarioSalao);
       salao.setHorarioFuncionamento(horarioFuncionamentoCompletoVO);
-      prosseguirTelaConfirmacaoCadastro();
+      ConfirmacaoCadastroVO confirmacaoCadastroVO = ConfirmacaoCadastroVO();
+      confirmacaoCadastroVO.setSalao(salao);
+      confirmacaoCadastroVO.setUsuario(usuario);
+      prosseguirTelaConfirmacaoCadastro(confirmacaoCadastroVO);
     });
   }
 
-  void prosseguirTelaConfirmacaoCadastro() {
-    Navigator.pushNamed(context, ConfirmacaoCadastroScreen.routeName, arguments: salao);
+  void prosseguirTelaConfirmacaoCadastro(ConfirmacaoCadastroVO confirmacaoCadastro) {
+    Navigator.pushNamed(context, ConfirmacaoCadastroScreen.routeName, arguments: confirmacaoCadastro);
   }
 
   @override
